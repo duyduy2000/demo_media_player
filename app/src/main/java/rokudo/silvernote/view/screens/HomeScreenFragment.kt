@@ -1,4 +1,4 @@
-package rokudo.silvernote
+package rokudo.silvernote.view.screens
 
 import android.os.Bundle
 import android.view.LayoutInflater
