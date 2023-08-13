@@ -18,6 +18,9 @@ class HomeScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
+
+        binding.rvMenuList.adapter = MenuListAdapter(dataList = listOf("item0", "item1"))
+
         return binding.root
     }
 
