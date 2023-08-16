@@ -1,6 +1,7 @@
 package rokudo.silvernote.view.screens.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +18,10 @@ class HomeScreenFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<HomeViewModel>()
-    private val noteListAdapter = NoteListAdapter(dataList = emptyList())
+    private val noteListAdapter = NoteListAdapter()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
 
@@ -35,6 +34,8 @@ class HomeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.allNotes.observe(viewLifecycleOwner) { noteList ->
             noteListAdapter.submitList(noteList)
+            Log.d("NoteList", "onViewCreated: $noteList")
+            Log.d("NoteList", "onViewCreated: ${noteListAdapter.itemCount}")
         }
     }
 

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import rokudo.silvernote.databinding.ItemViewNoteBinding
 import rokudo.silvernote.model.local.entity.Note
 
-class NoteListAdapter(private val dataList: List<Note>) :
+class NoteListAdapter :
     ListAdapter<Note, NoteListAdapter.ViewHolder>(NoteComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,10 +19,8 @@ class NoteListAdapter(private val dataList: List<Note>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(note = dataList[position])
+        holder.bind(note = getItem(position))
     }
-
-    override fun getItemCount(): Int = dataList.count()
 
     class ViewHolder(binding: ItemViewNoteBinding) : RecyclerView.ViewHolder(binding.root) {
         private val textView: TextView
