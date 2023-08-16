@@ -1,4 +1,4 @@
-package rokudo.silvernote.model.local.entities
+package rokudo.silvernote.model.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

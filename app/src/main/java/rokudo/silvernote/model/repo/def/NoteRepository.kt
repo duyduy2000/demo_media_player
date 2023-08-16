@@ -1,7 +1,7 @@
 package rokudo.silvernote.model.repo.def
 
 import kotlinx.coroutines.flow.Flow
-import rokudo.silvernote.model.local.entities.Note
+import rokudo.silvernote.model.local.entity.Note
 
 interface NoteRepository {
 

@@ -2,26 +2,27 @@ package rokudo.silvernote.model.repo.impl
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
-import rokudo.silvernote.model.local.dao.NoteDao
-import rokudo.silvernote.model.local.entities.Note
+import rokudo.silvernote.model.local.database.NoteDatabase
+import rokudo.silvernote.model.local.entity.Note
 import rokudo.silvernote.model.repo.def.NoteRepository
+import javax.inject.Inject
 
-class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository{
+class NoteRepositoryImpl @Inject constructor(private val database: NoteDatabase) : NoteRepository{
 
-    override val allNotes: Flow<List<Note>> = dao.getAllNotes()
+    override val allNotes: Flow<List<Note>> = database.noteDao().getAllNotes()
 
     @WorkerThread
     override suspend fun addNote(note: Note) {
-        dao.insert(note)
+        database.noteDao().insert(note)
     }
 
     @WorkerThread
     override suspend fun updateNote(note: Note) {
-        dao.insert(note)
+        database.noteDao().insert(note)
     }
 
     @WorkerThread
     override suspend fun deleteNote(noteList: List<Note>) {
-        dao.delete(noteList)
+        database.noteDao().delete(noteList)
     }
 }

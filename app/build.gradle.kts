@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -31,12 +33,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -66,6 +68,11 @@ android {
     }
 }
 
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
 
     // XML UI
@@ -73,20 +80,24 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 
     // Room components
-    implementation("androidx.room:room-ktx:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
+    val roomVersion = "2.5.2"
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     // Lifecycle components
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-common-java8:2.6.1")
+    val lifeCycleVersion = "2.6.1"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
 
     // Kotlin components
+    val coroutineVersion = "1.6.4"
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
 
     // Jetpack Compose
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -96,6 +107,11 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+
+    // Dagger Hilt
+    val hiltVersion = "2.44"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

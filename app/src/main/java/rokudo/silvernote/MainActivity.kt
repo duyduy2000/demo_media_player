@@ -2,8 +2,10 @@ package rokudo.silvernote
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import dagger.hilt.android.AndroidEntryPoint
 import rokudo.silvernote.databinding.ActivityMainBinding
 
+@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityMainBinding
