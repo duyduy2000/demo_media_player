@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Silver Note"
+rootProject.name = "Demo MP"
 include(":app")
