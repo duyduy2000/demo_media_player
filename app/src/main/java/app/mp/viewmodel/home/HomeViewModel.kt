@@ -18,6 +18,6 @@ class HomeViewModel @Inject constructor(
     var uiState = UiState()
         private set
 
-    val allNotes = repository.allNotes.asLiveData()
+    val allTracks = repository.allTracks.asLiveData()
 
 }

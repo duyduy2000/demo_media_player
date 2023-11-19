@@ -31,7 +31,7 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.allNotes.observe(viewLifecycleOwner) { noteList ->
+        viewModel.allTracks.observe(viewLifecycleOwner) { noteList ->
             noteListAdapter.submitList(noteList)
         }
     }

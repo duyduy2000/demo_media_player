@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class TrackRepositoryImpl @Inject constructor(private val database: TrackDatabase) : TrackRepository{
 
-    override val allNotes: Flow<List<Track>> = database.noteDao().getAllTracks()
+    override val allTracks: Flow<List<Track>> = database.noteDao().getAllTracks()
 
     @WorkerThread
     override suspend fun addTrack(track: Track) {

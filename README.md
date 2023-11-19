@@ -1,4 +1,4 @@
-# silver_note
-A simple notes manager app but with more customization.
+# Demo MP
+My personal music player app (using Spotify API)
 
-Tech stacks: Android (native), Kotlin, XML (mainly), Jetpack Compose
+Tech stacks: Android, Kotlin, XML, Jetpack Compose

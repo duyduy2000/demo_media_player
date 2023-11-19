@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "app.mp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "app.mp"
@@ -47,7 +47,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     packaging {
@@ -112,6 +112,9 @@ dependencies {
     val hiltVersion = "2.48.1"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    // Rest API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

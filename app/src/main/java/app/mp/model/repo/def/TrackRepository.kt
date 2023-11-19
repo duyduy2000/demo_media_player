@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
 
-    val allNotes: Flow<List<Track>>
+    val allTracks: Flow<List<Track>>
     suspend fun addTrack(track: Track)
     suspend fun updateTrack(track: Track)
     suspend fun deleteTracks(trackList: List<Track>)
