@@ -31,10 +31,10 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.allTracks.observe(viewLifecycleOwner) { noteList ->
-            noteListAdapter.submitList(noteList)
-        }
-        viewModel.getAccessToken()
+//        viewModel.allTracks.observe(viewLifecycleOwner) { noteList ->
+//            noteListAdapter.submitList(noteList)
+//        }
+        viewModel.getTrack()
     }
 
     override fun onDestroyView() {

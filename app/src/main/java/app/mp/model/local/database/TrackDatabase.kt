@@ -6,24 +6,24 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import app.mp.model.local.dao.TrackDao
-import app.mp.model.local.entity.Track
+import app.mp.model.local.entity.TrackEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Track::class], version = 1, exportSchema = false)
+@Database(entities = [TrackEntity::class], version = 1, exportSchema = false)
 abstract class TrackDatabase : RoomDatabase() {
 
-    abstract fun noteDao(): TrackDao
+    abstract fun trackDao(): TrackDao
 
     private class Callback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             instance?.let { database ->
-                scope.launch { populateData(dao = database.noteDao()) }
+                scope.launch { populateData(dao = database.trackDao()) }
             }
         }
 
-        fun populateData(dao: TrackDao) = dao.insert(Track(id = 0, title = "Welcome!"))
+        fun populateData(dao: TrackDao) = dao.insert(TrackEntity(id = 0, title = "Welcome!"))
     }
 
     companion object {

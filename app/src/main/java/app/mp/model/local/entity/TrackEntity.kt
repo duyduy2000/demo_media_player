@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "track_tbl")
-data class Track(
+data class TrackEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     @ColumnInfo(defaultValue = "untitled")
