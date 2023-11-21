@@ -6,7 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 
 class NoteItemView(context: Context, attributes: AttributeSet) :
     ConstraintLayout(context, attributes) {
-    override fun setOnClickListener(l: OnClickListener?) {
-        super.setOnClickListener(l)
-    }
+//    override fun setOnClickListener(l: OnClickListener?) {
+//        super.setOnClickListener(l)
+//    }
 }
