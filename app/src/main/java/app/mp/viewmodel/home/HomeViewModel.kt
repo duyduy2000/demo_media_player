@@ -1,9 +1,10 @@
 package app.mp.viewmodel.home
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.mp.common.util.ResponseResult
+import app.mp.common.util.media.AudioPlayer
 import app.mp.model.repo.def.TrackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,12 +23,12 @@ class HomeViewModel @Inject constructor(
     var uiState = UiState()
         private set
 
-    fun getTrack() {
+    fun getTrack(context: Context) {
         viewModelScope.launch {
-            trackRepository.getTrackFromId(680316).collect{
-                when(it) {
+            trackRepository.getTrackFromId(680316).collect {
+                when (it) {
                     is ResponseResult.Failed -> uiState
-                    is ResponseResult.Success -> Log.e("track", it.data!!.toString())
+                    is ResponseResult.Success -> AudioPlayer.playTrack(remoteUrl = it.data!!.previews.previewHqMp3, context)
                     is ResponseResult.Unknown -> uiState
                 }
             }

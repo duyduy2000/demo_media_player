@@ -34,7 +34,7 @@ class HomeScreenFragment : Fragment() {
 //        viewModel.allTracks.observe(viewLifecycleOwner) { noteList ->
 //            noteListAdapter.submitList(noteList)
 //        }
-        viewModel.getTrack()
+        context?.let { viewModel.getTrack(it) }
     }
 
     override fun onDestroyView() {
