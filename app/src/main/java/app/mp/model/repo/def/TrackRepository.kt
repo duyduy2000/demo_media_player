@@ -1,7 +1,7 @@
 package app.mp.model.repo.def
 
 import app.mp.common.util.ResponseResult
-import app.mp.model.model.Track
+import app.mp.model.remote.dto.TrackDto
 import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
@@ -11,6 +11,6 @@ interface TrackRepository {
 //    suspend fun updateTrack(track: TrackEntity)
 //    suspend fun deleteTracks(trackList: List<TrackEntity>)
 
-    suspend fun getTrackFromId(id: Int): Flow<ResponseResult<Track>>
+    suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>>
 
 }

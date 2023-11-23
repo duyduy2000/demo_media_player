@@ -10,12 +10,13 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
-import androidx.media3.exoplayer.ExoPlayer
+import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import app.mp.common.util.media.AudioPlayer
 
 class AudioPlayerService : MediaSessionService() {
-    private var mediaSession: MediaSession? = null
+    private val audioPlayer = AudioPlayer(this)
 
     override fun onBind(intent: Intent?): IBinder? {
         super.onBind(intent)
@@ -23,15 +24,19 @@ class AudioPlayerService : MediaSessionService() {
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
-        mediaSession
+        audioPlayer.mediaSession
 
     override fun onDestroy() {
-        mediaSession?.apply {
-            player.release()
-            release()
-            mediaSession = null
-        }
+        audioPlayer.release()
         super.onDestroy()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            Action.START.name -> start()
+            Action.STOP.name -> stopSelf()
+        }
+        return super.onStartCommand(intent, flags, startId)
     }
 
     private fun start() {
@@ -44,13 +49,16 @@ class AudioPlayerService : MediaSessionService() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setContentTitle("Sample Track")
             .setContentText("Unknown Artist")
+            .setStyle(MediaStyle())
             .build()
+
 
         try {
             ServiceCompat.startForeground(
-                /* service = */ this,
+                /* service = */this,
                 /* id = */ 1,
                 /* notification = */ notification,
+                /* foregroundServiceType = */
                 /* foregroundServiceType = */
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                     ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
@@ -76,9 +84,6 @@ class AudioPlayerService : MediaSessionService() {
         true
     }
 
-    private fun playTrack() {
-        val player = ExoPlayer.Builder(this).build()
-        mediaSession = MediaSession.Builder(this, player).build()
-    }
+    enum class Action { START, STOP }
 
 }

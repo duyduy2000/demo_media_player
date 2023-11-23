@@ -76,7 +76,6 @@ kapt {
 
 dependencies {
 
-    // XML UI
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
@@ -122,11 +121,12 @@ dependencies {
     // Json
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1")
 
-    // Media3 Exoplayer
+    // Media player
     val media3Version = "1.2.0"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
     implementation("androidx.media3:media3-common:$media3Version")
     implementation("androidx.media3:media3-session:$media3Version")
+    implementation("androidx.media:media:1.6.0")
 //    implementation("androidx.media3:media3-ui:1.2.0")
 
     // Testing

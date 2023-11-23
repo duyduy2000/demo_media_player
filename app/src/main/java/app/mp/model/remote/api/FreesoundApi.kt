@@ -1,6 +1,6 @@
-package app.mp.model.remote
+package app.mp.model.remote.api
 
-import app.mp.model.model.Track
+import app.mp.model.remote.dto.TrackDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,5 +12,5 @@ interface FreesoundApi {
     suspend fun getTrackById(
         @Path("id") soundId: Int,
         @Query("token") token: String
-    ): Response<Track>
+    ): Response<TrackDto>
 }

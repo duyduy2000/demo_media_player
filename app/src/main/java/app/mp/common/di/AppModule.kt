@@ -1,6 +1,6 @@
 package app.mp.common.di
 
-import app.mp.model.remote.FreesoundApi
+import app.mp.model.remote.api.FreesoundApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

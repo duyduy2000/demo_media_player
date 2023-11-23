@@ -1,8 +1,8 @@
 package app.mp.model.repo.impl
 
 import app.mp.common.util.ResponseResult
-import app.mp.model.model.AccessToken
-import app.mp.model.remote.FreesoundApi
+import app.mp.model.remote.dto.AccessTokenDto
+import app.mp.model.remote.api.FreesoundApi
 import app.mp.model.repo.def.TokenRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,7 +12,7 @@ class TokenRepositoryImpl @Inject constructor(private val api: FreesoundApi) : T
 
     private val errorLogTag = "Token Repository Error"
 
-    override suspend fun getAccessToken(): Flow<ResponseResult<AccessToken>> = flow {
+    override suspend fun getAccessToken(): Flow<ResponseResult<AccessTokenDto>> = flow {
 //        try {
 //            emit(ResponseResult.Unknown())
 //

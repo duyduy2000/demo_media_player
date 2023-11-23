@@ -3,8 +3,8 @@ package app.mp.model.repo.impl
 import android.util.Log
 import app.mp.common.util.ResponseResult
 import app.mp.common.util.getApiKey
-import app.mp.model.model.Track
-import app.mp.model.remote.FreesoundApi
+import app.mp.model.remote.dto.TrackDto
+import app.mp.model.remote.api.FreesoundApi
 import app.mp.model.repo.def.TrackRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : TrackRepository {
     private val errorLogTag = "Track Repository Error"
 
-    override suspend fun getTrackFromId(id: Int): Flow<ResponseResult<Track>> = flow {
+    override suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>> = flow {
         try {
             emit(ResponseResult.Unknown())
 
