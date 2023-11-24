@@ -5,7 +5,6 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC
 import androidx.media3.common.C.USAGE_MEDIA
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 
@@ -26,6 +25,11 @@ class AudioPlayer(context: Context) {
         mediaSession = MediaSession.Builder(context, player).build()
     }
 
+    fun play() = mediaSession?.player?.apply {
+        prepare()
+        play()
+    }
+
     fun release() {
         mediaSession?.apply {
             player.release()
@@ -34,21 +38,13 @@ class AudioPlayer(context: Context) {
         }
     }
 
-    fun playAudio(remoteUrl: String) {
-        val audio = MediaItem.Builder()
-            .setUri(remoteUrl)
-            .setMediaId("1")
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setTitle("Song 1")
-                    .setArtist("Artist 1")
+    fun addAudiosFromUri(uriList: List<String>) = mediaSession?.player?.apply {
+        for (uri in uriList) {
+            addMediaItem(
+                MediaItem.Builder()
+                    .setUri(uri)
                     .build()
             )
-            .build()
-        mediaSession?.player?.apply {
-            setMediaItem(audio)
-            prepare()
-            play()
         }
     }
 }

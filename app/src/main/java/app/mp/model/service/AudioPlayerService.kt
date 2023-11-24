@@ -6,6 +6,7 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
+import androidx.media3.common.Player
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import app.mp.common.util.PermissionHandler
@@ -16,6 +17,8 @@ import app.mp.common.util.media.PlayerListener
 class AudioPlayerService : MediaSessionService() {
     private lateinit var audioPlayer: AudioPlayer
     private lateinit var notification: AudioPlayerNotification
+    private val player
+        get() = audioPlayer.mediaSession?.player
 
     override fun onBind(intent: Intent?): IBinder? {
         super.onBind(intent)
@@ -30,7 +33,7 @@ class AudioPlayerService : MediaSessionService() {
         audioPlayer = AudioPlayer(this)
         notification = AudioPlayerNotification(this, audioPlayer)
 
-        audioPlayer.mediaSession?.player?.addListener(
+        player?.addListener(
             PlayerListener(
                 audioPlayer = audioPlayer,
                 notification = notification
@@ -39,7 +42,7 @@ class AudioPlayerService : MediaSessionService() {
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        val player = audioPlayer.mediaSession?.player!!
+        val player = player!!
         if (!player.playWhenReady || player.mediaItemCount == 0) {
             stopSelf()
         }
@@ -55,12 +58,20 @@ class AudioPlayerService : MediaSessionService() {
             Action.START.name -> start()
             Action.STOP.name -> stopSelf()
             Action.PAUSE.name -> {
-                audioPlayer.mediaSession?.player?.pause()
+                player?.pause()
                 notification.updateOnPlayerStateChange()
             }
 
             Action.PLAY.name -> {
-                audioPlayer.mediaSession?.player?.play()
+                player?.play()
+                notification.updateOnPlayerStateChange()
+            }
+            Action.REPEAT_ONE.name -> {
+                player?.repeatMode = Player.REPEAT_MODE_ONE
+                notification.updateOnPlayerStateChange()
+            }
+            Action.REPEAT_ALL.name -> {
+                player?.repeatMode = Player.REPEAT_MODE_ALL
                 notification.updateOnPlayerStateChange()
             }
         }
@@ -84,10 +95,14 @@ class AudioPlayerService : MediaSessionService() {
             /* foregroundServiceType = */ serviceType,
         )
 
-        audioPlayer.playAudio("https://cdn.freesound.org/previews/680/680316_10399452-hq.mp3")
+        audioPlayer.addAudiosFromUri(listOf(
+            "https://cdn.freesound.org/previews/680/680316_10399452-hq.mp3",
+            "https://cdn.freesound.org/previews/213/213524_862453-hq.mp3"
+        ))
+        audioPlayer.play()
     }
 
-    enum class Action { START, STOP, PLAY, PAUSE, NEXT, PREVIOUS }
+    enum class Action { START, STOP, PLAY, PAUSE, NEXT, PREVIOUS, REPEAT_ALL, REPEAT_ONE }
 
     companion object {
         const val channelId = "Audio player"

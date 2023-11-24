@@ -10,6 +10,7 @@ class PlayerListener(
         get() = audioPlayer.mediaSession?.player!!
 
     override fun onPlaybackStateChanged(playbackState: Int) {
+        // Change icon Pause to Play when track ends
         if (player.playbackState == Player.STATE_ENDED) {
             notification.updateOnPlayerStateChange()
         }
