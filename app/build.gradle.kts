@@ -127,7 +127,7 @@ dependencies {
     implementation("androidx.media3:media3-common:$media3Version")
     implementation("androidx.media3:media3-session:$media3Version")
     implementation("androidx.media:media:1.6.0")
-//    implementation("androidx.media3:media3-ui:1.2.0")
+    implementation("androidx.media3:media3-ui:$media3Version")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
