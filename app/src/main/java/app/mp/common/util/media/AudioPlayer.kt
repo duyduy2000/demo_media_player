@@ -8,9 +8,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
-import androidx.media3.session.MediaSession.Callback
 
-class AudioPlayer(context: Context, callback: Callback) {
+class AudioPlayer(context: Context) {
     var mediaSession: MediaSession? = null
         private set
 
@@ -24,7 +23,7 @@ class AudioPlayer(context: Context, callback: Callback) {
                 true
             )
         }
-        mediaSession = MediaSession.Builder(context, player).setCallback(callback).build()
+        mediaSession = MediaSession.Builder(context, player).build()
     }
 
     fun release() {
@@ -52,5 +51,4 @@ class AudioPlayer(context: Context, callback: Callback) {
             play()
         }
     }
-
 }

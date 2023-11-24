@@ -1,28 +1,21 @@
 package app.mp.model.service
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Notification
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
-import androidx.core.content.ContextCompat
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import app.mp.common.util.PermissionHandler
 import app.mp.common.util.media.AudioPlayer
 import app.mp.common.util.media.AudioPlayerNotification
+import app.mp.common.util.media.PlayerListener
 
-class AudioPlayerService : MediaSessionService(), MediaSession.Callback {
+class AudioPlayerService : MediaSessionService() {
     private lateinit var audioPlayer: AudioPlayer
-    private val serviceType =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-        else 0
-    private lateinit var notification: Notification
+    private lateinit var notification: AudioPlayerNotification
 
     override fun onBind(intent: Intent?): IBinder? {
         super.onBind(intent)
@@ -34,8 +27,22 @@ class AudioPlayerService : MediaSessionService(), MediaSession.Callback {
 
     override fun onCreate() {
         super.onCreate()
-        audioPlayer = AudioPlayer(this, this)
-        notification = AudioPlayerNotification(this).build(true)
+        audioPlayer = AudioPlayer(this)
+        notification = AudioPlayerNotification(this, audioPlayer)
+
+        audioPlayer.mediaSession?.player?.addListener(
+            PlayerListener(
+                audioPlayer = audioPlayer,
+                notification = notification
+            )
+        )
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        val player = audioPlayer.mediaSession?.player!!
+        if (!player.playWhenReady || player.mediaItemCount == 0) {
+            stopSelf()
+        }
     }
 
     override fun onDestroy() {
@@ -49,57 +56,38 @@ class AudioPlayerService : MediaSessionService(), MediaSession.Callback {
             Action.STOP.name -> stopSelf()
             Action.PAUSE.name -> {
                 audioPlayer.mediaSession?.player?.pause()
-                updateNotificationOnPlayerStateChange()
+                notification.updateOnPlayerStateChange()
             }
 
             Action.PLAY.name -> {
                 audioPlayer.mediaSession?.player?.play()
-                updateNotificationOnPlayerStateChange()
+                notification.updateOnPlayerStateChange()
             }
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
     private fun start() {
-        if (!checkIfPermissionGranted()) {
+        if (!PermissionHandler.checkForegroundServicePermission(this)) {
             stopSelf()
             return
         }
 
+        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+        else 0
+
         ServiceCompat.startForeground(
             /* service = */this,
             /* id = */ notificationId,
-            /* notification = */ notification,
+            /* notification = */ notification.self,
             /* foregroundServiceType = */ serviceType,
         )
 
         audioPlayer.playAudio("https://cdn.freesound.org/previews/680/680316_10399452-hq.mp3")
     }
 
-    private fun checkIfPermissionGranted(): Boolean {
-        val checkPermission = { permission: String ->
-            ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-        }
-
-        val foregroundServicePermission =
-            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && checkPermission(Manifest.permission.FOREGROUND_SERVICE))
-                    || Build.VERSION.SDK_INT < Build.VERSION_CODES.P
-
-        val postNotificationPermission =
-            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && checkPermission(Manifest.permission.POST_NOTIFICATIONS))
-                    || Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-
-        return foregroundServicePermission && postNotificationPermission
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun updateNotificationOnPlayerStateChange() {
-        val playerState = audioPlayer.mediaSession?.player!!.isPlaying
-        notification = AudioPlayerNotification(this).build(isPlaying = playerState)
-        NotificationManagerCompat.from(this).notify(notificationId, notification)
-    }
-
-    enum class Action { START, STOP, PLAY, PAUSE }
+    enum class Action { START, STOP, PLAY, PAUSE, NEXT, PREVIOUS }
 
     companion object {
         const val channelId = "Audio player"
@@ -108,9 +96,8 @@ class AudioPlayerService : MediaSessionService(), MediaSession.Callback {
         fun getActionIntent(context: Context, action: Action) = Intent(
             context,
             AudioPlayerService::class.java
-        ).apply {
-            this.action = action.name
-        }
+        ).apply { this.action = action.name }
     }
 
 }
+
