@@ -5,6 +5,7 @@ import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC
 import androidx.media3.common.C.USAGE_MEDIA
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 
@@ -21,6 +22,7 @@ class AudioPlayer(context: Context) {
                     .build(),
                 true
             )
+            repeatMode = Player.REPEAT_MODE_ALL
         }
         mediaSession = MediaSession.Builder(context, player).build()
     }

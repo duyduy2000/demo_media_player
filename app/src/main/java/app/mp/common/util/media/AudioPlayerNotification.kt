@@ -19,41 +19,50 @@ class AudioPlayerNotification(private val service: Service, private val audioPla
     var self: Notification
 
     init {
-        self = buildNotification()
         repeatMode = player.repeatMode
+        self = buildNotification()
     }
 
-    private fun buildNotification(): Notification {
-        val pauseIntent = getActionIntent(Action.PAUSE)
-        val playIntent = getActionIntent(Action.PLAY)
-        val toNextTrackIntent = getActionIntent(Action.NEXT)
-        val toPreviousTrackIntent = getActionIntent(Action.PREVIOUS)
-        val stopServiceIntent = getActionIntent(Action.STOP)
-        val setRepeatAllIntent = getActionIntent(Action.REPEAT_ALL)
-        val setRepeatOneIntent = getActionIntent(Action.REPEAT_ONE)
-
-        return NotificationCompat.Builder(service, AudioPlayerService.channelId)
+    private fun buildNotification() =
+        NotificationCompat.Builder(service, AudioPlayerService.channelId)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setSmallIcon(R.drawable.round_music_note_24)
-            .addAction(R.drawable.round_skip_previous_24, "Previous", toPreviousTrackIntent)
+            .setSmallIcon(R.drawable.round_music_note_36)
             .addAction(
-                if (isPlaying) R.drawable.round_pause_24 else R.drawable.round_play_arrow_24,
+                R.drawable.round_skip_previous_36,
+                "Previous",
+                getActionIntent(Action.PREVIOUS)
+            )
+            .addAction(
+                if (isPlaying) R.drawable.round_pause_36 else R.drawable.round_play_arrow_36,
                 "Play / Pause",
-                if (isPlaying) pauseIntent else playIntent
+                if (isPlaying) getActionIntent(Action.PAUSE) else getActionIntent(Action.PLAY)
             )
-            .addAction(R.drawable.round_skip_next_24, "Next", toNextTrackIntent)
             .addAction(
-                if (repeatMode == Player.REPEAT_MODE_ALL) R.drawable.round_repeat_24 else R.drawable.round_repeat_one_24,
-                "Repeat all / one",
-                if (repeatMode == Player.REPEAT_MODE_ALL) setRepeatOneIntent else setRepeatAllIntent
+                R.drawable.round_skip_next_36,
+                "Next",
+                getActionIntent(Action.NEXT)
             )
-            .addAction(R.drawable.round_close_24, "Next", stopServiceIntent)
+            .addAction(
+                when (repeatMode) {
+                    Player.REPEAT_MODE_ALL -> R.drawable.round_repeat_36
+                    else -> R.drawable.round_repeat_one_36
+                },
+                "Repeat all / one",
+                when (repeatMode) {
+                    Player.REPEAT_MODE_ALL -> getActionIntent(Action.REPEAT_ONE)
+                    else -> getActionIntent(Action.REPEAT_ALL)
+                }
+            )
+            .addAction(
+                R.drawable.round_close_36,
+                "Next",
+                getActionIntent(Action.STOP)
+            )
             .setContentTitle("Sample Track")
             .setContentText("Unknown Artist")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(MediaStyle().setShowActionsInCompactView(0, 1, 2))
             .build()
-    }
 
     private fun rebuild() {
         isPlaying = player.isPlaying

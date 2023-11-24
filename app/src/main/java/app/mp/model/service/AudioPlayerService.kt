@@ -33,12 +33,14 @@ class AudioPlayerService : MediaSessionService() {
         audioPlayer = AudioPlayer(this)
         notification = AudioPlayerNotification(this, audioPlayer)
 
-        player?.addListener(
-            PlayerListener(
-                audioPlayer = audioPlayer,
-                notification = notification
+        player?.apply {
+            addListener(
+                PlayerListener(
+                    audioPlayer = audioPlayer,
+                    notification = notification
+                )
             )
-        )
+        }
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
