@@ -1,5 +1,6 @@
 package app.mp.common.di
 
+import app.mp.common.util.media.AudioPlayerState
 import app.mp.model.remote.api.FreesoundApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -30,4 +31,8 @@ object AppModule {
         )
         .build()
         .create(FreesoundApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAudioPlayerState() = AudioPlayerState()
 }

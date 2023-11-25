@@ -1,9 +1,11 @@
 package app.mp.viewmodel.home
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import app.mp.common.util.ResponseResult
+import app.mp.common.util.media.AudioPlayerState
+import app.mp.model.mapper.toModel
 import app.mp.model.repo.def.TrackRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val trackRepository: TrackRepository,
-//    private val tokenRepository: TokenRepository,
+    audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
 
     data class UiState(
@@ -22,16 +24,19 @@ class HomeViewModel @Inject constructor(
     var uiState = UiState()
         private set
 
-    fun getTrack(context: Context) {
+    val playerState = audioPlayerState.playerState.asLiveData()
+
+    fun getTrack() {
         viewModelScope.launch {
             trackRepository.getTrackFromId(680316).collect {
                 when (it) {
                     is ResponseResult.Failed -> uiState
-                    is ResponseResult.Success -> uiState
+                    is ResponseResult.Success -> it.data!!.toModel()
                     is ResponseResult.Unknown -> uiState
                 }
             }
         }
     }
+
 
 }

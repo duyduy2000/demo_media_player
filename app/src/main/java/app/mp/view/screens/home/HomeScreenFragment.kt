@@ -1,11 +1,13 @@
 package app.mp.view.screens.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import app.mp.R
 import app.mp.databinding.FragmentHomeScreenBinding
 import app.mp.model.service.AudioPlayerService
 import app.mp.viewmodel.home.HomeViewModel
@@ -35,12 +37,20 @@ class HomeScreenFragment : Fragment() {
 //        viewModel.allTracks.observe(viewLifecycleOwner) { noteList ->
 //            noteListAdapter.submitList(noteList)
 //        }
-//        context?.let { viewModel.getTrack(it) }
+//        viewModel.getTrack(it)
 
         val startService =
             AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
         requireActivity().startService(startService)
 
+        viewModel.playerState.observe(viewLifecycleOwner) {
+            val playerView = binding.playerView
+            Log.e("audio", it.toString())
+            if (it.isPlaying)
+                playerView.btnPlay.setImageResource(R.drawable.round_pause_36)
+            else
+                playerView.btnPlay.setImageResource(R.drawable.round_play_arrow_36)
+        }
     }
 
     override fun onDestroyView() {

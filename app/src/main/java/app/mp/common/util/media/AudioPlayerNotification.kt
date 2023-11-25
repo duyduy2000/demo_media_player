@@ -13,18 +13,15 @@ import app.mp.model.service.AudioPlayerService
 import app.mp.model.service.AudioPlayerService.Action
 
 class AudioPlayerNotification(private val service: Service, private val audioPlayer: AudioPlayer) {
-    private var isPlaying = true
-    private var repeatMode: Int
     private val player get() = audioPlayer.mediaSession?.player!!
-    var self: Notification
+    lateinit var self: Notification
 
     init {
-        repeatMode = player.repeatMode
-        self = buildNotification()
+        buildNotification()
     }
 
-    private fun buildNotification() =
-        NotificationCompat.Builder(service, AudioPlayerService.channelId)
+    private fun buildNotification() {
+        self = NotificationCompat.Builder(service, AudioPlayerService.channelId)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setSmallIcon(R.drawable.round_music_note_36)
             .addAction(
@@ -33,9 +30,9 @@ class AudioPlayerNotification(private val service: Service, private val audioPla
                 getActionIntent(Action.PREVIOUS)
             )
             .addAction(
-                if (isPlaying) R.drawable.round_pause_36 else R.drawable.round_play_arrow_36,
+                if (player.playWhenReady) R.drawable.round_pause_36 else R.drawable.round_play_arrow_36,
                 "Play / Pause",
-                if (isPlaying) getActionIntent(Action.PAUSE) else getActionIntent(Action.PLAY)
+                if (player.playWhenReady) getActionIntent(Action.PAUSE) else getActionIntent(Action.PLAY)
             )
             .addAction(
                 R.drawable.round_skip_next_36,
@@ -43,12 +40,12 @@ class AudioPlayerNotification(private val service: Service, private val audioPla
                 getActionIntent(Action.NEXT)
             )
             .addAction(
-                when (repeatMode) {
+                when (player.repeatMode) {
                     Player.REPEAT_MODE_ALL -> R.drawable.round_repeat_36
                     else -> R.drawable.round_repeat_one_36
                 },
                 "Repeat all / one",
-                when (repeatMode) {
+                when (player.repeatMode) {
                     Player.REPEAT_MODE_ALL -> getActionIntent(Action.REPEAT_ONE)
                     else -> getActionIntent(Action.REPEAT_ALL)
                 }
@@ -63,16 +60,11 @@ class AudioPlayerNotification(private val service: Service, private val audioPla
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(MediaStyle().setShowActionsInCompactView(0, 1, 2))
             .build()
-
-    private fun rebuild() {
-        isPlaying = player.isPlaying
-        repeatMode = player.repeatMode
-        self = buildNotification()
     }
 
     @SuppressLint("MissingPermission")
     fun updateOnPlayerStateChange() {
-        rebuild()
+        buildNotification()
         NotificationManagerCompat.from(service).notify(AudioPlayerService.notificationId, self)
     }
 

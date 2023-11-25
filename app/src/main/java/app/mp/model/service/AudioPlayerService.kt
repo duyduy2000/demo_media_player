@@ -12,13 +12,20 @@ import androidx.media3.session.MediaSessionService
 import app.mp.common.util.PermissionHandler
 import app.mp.common.util.media.AudioPlayer
 import app.mp.common.util.media.AudioPlayerNotification
+import app.mp.common.util.media.AudioPlayerState
 import app.mp.common.util.media.PlayerListener
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AudioPlayerService : MediaSessionService() {
     private lateinit var audioPlayer: AudioPlayer
     private lateinit var notification: AudioPlayerNotification
     private val player
         get() = audioPlayer.mediaSession?.player
+
+    @Inject
+    lateinit var playerState: AudioPlayerState
 
     override fun onBind(intent: Intent?): IBinder? {
         super.onBind(intent)
@@ -30,22 +37,11 @@ class AudioPlayerService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        audioPlayer = AudioPlayer(this)
-        notification = AudioPlayerNotification(this, audioPlayer)
-
-        player?.apply {
-            addListener(
-                PlayerListener(
-                    audioPlayer = audioPlayer,
-                    notification = notification
-                )
-            )
-        }
+        initialConfig()
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        val player = player!!
-        if (!player.playWhenReady || player.mediaItemCount == 0) {
+        if (!player!!.playWhenReady || player!!.mediaItemCount == 0) {
             stopSelf()
         }
     }
@@ -56,27 +52,7 @@ class AudioPlayerService : MediaSessionService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            Action.START.name -> start()
-            Action.STOP.name -> stopSelf()
-            Action.PAUSE.name -> {
-                player?.pause()
-                notification.updateOnPlayerStateChange()
-            }
-
-            Action.PLAY.name -> {
-                player?.play()
-                notification.updateOnPlayerStateChange()
-            }
-            Action.REPEAT_ONE.name -> {
-                player?.repeatMode = Player.REPEAT_MODE_ONE
-                notification.updateOnPlayerStateChange()
-            }
-            Action.REPEAT_ALL.name -> {
-                player?.repeatMode = Player.REPEAT_MODE_ALL
-                notification.updateOnPlayerStateChange()
-            }
-        }
+        updatePlayerOnAction(action = intent?.action)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -97,11 +73,41 @@ class AudioPlayerService : MediaSessionService() {
             /* foregroundServiceType = */ serviceType,
         )
 
-        audioPlayer.addAudiosFromUri(listOf(
-            "https://cdn.freesound.org/previews/680/680316_10399452-hq.mp3",
-            "https://cdn.freesound.org/previews/213/213524_862453-hq.mp3"
-        ))
+        audioPlayer.addAudiosFromUri(
+            listOf(
+                "https://cdn.freesound.org/previews/680/680316_10399452-hq.mp3",
+                "https://cdn.freesound.org/previews/213/213524_862453-hq.mp3"
+            )
+        )
         audioPlayer.play()
+    }
+
+    private fun updatePlayerOnAction(action: String?) {
+        when(action)  {
+            Action.START.name -> start()
+            Action.STOP.name -> stopSelf()
+            Action.PAUSE.name -> player!!.pause()
+            Action.PLAY.name -> player!!.play()
+            Action.REPEAT_ONE.name -> player!!.repeatMode = Player.REPEAT_MODE_ONE
+            Action.REPEAT_ALL.name -> player!!.repeatMode = Player.REPEAT_MODE_ALL
+            Action.NEXT.name -> player!!.seekToNextMediaItem()
+            Action.PREVIOUS.name -> player!!.seekToPreviousMediaItem()
+        }
+    }
+
+    private fun initialConfig() {
+        audioPlayer = AudioPlayer(this)
+        notification = AudioPlayerNotification(this, audioPlayer)
+
+        player!!.apply {
+            addListener(
+                PlayerListener(
+                    audioPlayer = audioPlayer,
+                    notification = notification,
+                    state = playerState
+                )
+            )
+        }
     }
 
     enum class Action { START, STOP, PLAY, PAUSE, NEXT, PREVIOUS, REPEAT_ALL, REPEAT_ONE }
