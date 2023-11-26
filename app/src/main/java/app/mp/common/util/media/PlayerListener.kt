@@ -28,6 +28,7 @@ class PlayerListener(
     }
 
     override fun onRepeatModeChanged(repeatMode: Int) {
+        state.playerState.update { state.playerState.value.copy(repeatMode = repeatMode) }
         notification.updateOnPlayerStateChange()
         super.onRepeatModeChanged(repeatMode)
     }

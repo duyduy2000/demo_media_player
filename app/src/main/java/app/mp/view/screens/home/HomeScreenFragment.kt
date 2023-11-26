@@ -1,13 +1,14 @@
 package app.mp.view.screens.home
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import app.mp.R
+import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.FragmentHomeScreenBinding
 import app.mp.model.service.AudioPlayerService
 import app.mp.viewmodel.home.HomeViewModel
@@ -21,6 +22,7 @@ class HomeScreenFragment : Fragment() {
 
     private val viewModel by viewModels<HomeViewModel>()
     private val noteListAdapter = NoteListAdapter()
+    private val playerServiceBinder = PlayerServiceBinder()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,18 +41,34 @@ class HomeScreenFragment : Fragment() {
 //        }
 //        viewModel.getTrack(it)
 
-        val startService =
-            AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
-        requireActivity().startService(startService)
+        AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
+            .apply {
+                requireActivity().startService(this)
+                requireActivity().bindService(this, playerServiceBinder, Context.BIND_AUTO_CREATE)
+            }
 
         viewModel.playerState.observe(viewLifecycleOwner) {
             val playerView = binding.playerView
-            Log.e("audio", it.toString())
             if (it.isPlaying)
                 playerView.btnPlay.setImageResource(R.drawable.round_pause_36)
             else
                 playerView.btnPlay.setImageResource(R.drawable.round_play_arrow_36)
         }
+
+        binding.playerView.btnPlay.setOnClickListener {
+            if (playerServiceBinder.isBound) {
+                if(viewModel.playerState.value!!.isPlaying)
+                    playerServiceBinder.service.player.pause()
+                else
+                    playerServiceBinder.service.player.play()
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().unbindService(playerServiceBinder)
+        playerServiceBinder.isBound = false
     }
 
     override fun onDestroyView() {

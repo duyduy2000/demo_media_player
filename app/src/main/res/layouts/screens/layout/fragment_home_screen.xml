@@ -18,7 +18,7 @@
 
     <include
         android:id="@+id/player_view"
-        layout="@layout/view_player"
+        layout="@layout/view_player_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

@@ -3,6 +3,7 @@ package app.mp.model.service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
@@ -21,15 +22,21 @@ import javax.inject.Inject
 class AudioPlayerService : MediaSessionService() {
     private lateinit var audioPlayer: AudioPlayer
     private lateinit var notification: AudioPlayerNotification
-    private val player
-        get() = audioPlayer.mediaSession?.player
+    private val binder = LocalBinder()
+    val player
+        get() = audioPlayer.mediaSession?.player!!
 
     @Inject
     lateinit var playerState: AudioPlayerState
 
-    override fun onBind(intent: Intent?): IBinder? {
+    inner class LocalBinder : Binder() {
+        val service
+            get() = this@AudioPlayerService
+    }
+
+    override fun onBind(intent: Intent?): IBinder {
         super.onBind(intent)
-        return null
+        return binder
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? =
@@ -41,7 +48,7 @@ class AudioPlayerService : MediaSessionService() {
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
-        if (!player!!.playWhenReady || player!!.mediaItemCount == 0) {
+        if (!player.playWhenReady || player.mediaItemCount == 0) {
             stopSelf()
         }
     }
@@ -86,12 +93,12 @@ class AudioPlayerService : MediaSessionService() {
         when(action)  {
             Action.START.name -> start()
             Action.STOP.name -> stopSelf()
-            Action.PAUSE.name -> player!!.pause()
-            Action.PLAY.name -> player!!.play()
-            Action.REPEAT_ONE.name -> player!!.repeatMode = Player.REPEAT_MODE_ONE
-            Action.REPEAT_ALL.name -> player!!.repeatMode = Player.REPEAT_MODE_ALL
-            Action.NEXT.name -> player!!.seekToNextMediaItem()
-            Action.PREVIOUS.name -> player!!.seekToPreviousMediaItem()
+            Action.PAUSE.name -> player.pause()
+            Action.PLAY.name -> player.play()
+            Action.REPEAT_ONE.name -> player.repeatMode = Player.REPEAT_MODE_ONE
+            Action.REPEAT_ALL.name -> player.repeatMode = Player.REPEAT_MODE_ALL
+            Action.NEXT.name -> player.seekToNextMediaItem()
+            Action.PREVIOUS.name -> player.seekToPreviousMediaItem()
         }
     }
 
@@ -99,7 +106,7 @@ class AudioPlayerService : MediaSessionService() {
         audioPlayer = AudioPlayer(this)
         notification = AudioPlayerNotification(this, audioPlayer)
 
-        player!!.apply {
+        player.apply {
             addListener(
                 PlayerListener(
                     audioPlayer = audioPlayer,

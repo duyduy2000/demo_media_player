@@ -9,6 +9,7 @@ class AudioPlayerState(
     data class PlayerState(
         var playbackState: Int = Player.STATE_ENDED,
         var isPlaying: Boolean = true,
+        var repeatMode: Int = Player.REPEAT_MODE_ALL,
     )
 }
 
