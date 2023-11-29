@@ -11,6 +11,7 @@ import app.mp.R
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.FragmentHomeScreenBinding
 import app.mp.model.service.AudioPlayerService
+import app.mp.view.widget.player.PlayerButtons
 import app.mp.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +22,7 @@ class HomeScreenFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<HomeViewModel>()
-    private val noteListAdapter = NoteListAdapter()
+    private val trackListAdapter = TrackListAdapter()
     private val playerServiceBinder = PlayerServiceBinder()
 
     override fun onCreateView(
@@ -30,16 +31,14 @@ class HomeScreenFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
-        binding.rvNoteList.adapter = noteListAdapter
+        binding.rvNoteList.adapter = trackListAdapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.allTracks.observe(viewLifecycleOwner) { noteList ->
-//            noteListAdapter.submitList(noteList)
-//        }
-//        viewModel.getTrack(it)
+
+        viewModel.getTrack()
 
         AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
             .apply {
@@ -47,22 +46,37 @@ class HomeScreenFragment : Fragment() {
                 requireActivity().bindService(this, playerServiceBinder, Context.BIND_AUTO_CREATE)
             }
 
+        viewModel.trackList.observe(viewLifecycleOwner) {
+            trackListAdapter.submitList(it)
+            if (playerServiceBinder.isBound && it!!.isNotEmpty()) {
+                playerServiceBinder.service.audioPlayer.addAudiosFromUri(viewModel.trackList.value!!.map { track ->
+                    track.previewHqMp3
+                })
+                playerServiceBinder.service.audioPlayer.play()
+            }
+        }
+
         viewModel.playerState.observe(viewLifecycleOwner) {
             val playerView = binding.playerView
             if (it.isPlaying)
                 playerView.btnPlay.setImageResource(R.drawable.round_pause_36)
             else
                 playerView.btnPlay.setImageResource(R.drawable.round_play_arrow_36)
+
         }
 
-        binding.playerView.btnPlay.setOnClickListener {
-            if (playerServiceBinder.isBound) {
-                if(viewModel.playerState.value!!.isPlaying)
-                    playerServiceBinder.service.player.pause()
-                else
-                    playerServiceBinder.service.player.play()
-            }
+        viewModel.currentTrackState.observe(viewLifecycleOwner) {
+            val playerView = binding.playerView
+            playerView.txtName.text = it.name
         }
+
+        PlayerButtons(
+            playerBinder = playerServiceBinder,
+            btnPlay = binding.playerView.btnPlay,
+            btnNext = binding.playerView.btnNext,
+            btnPrevious = binding.playerView.btnPrev
+        ).build()
+
     }
 
     override fun onStop() {

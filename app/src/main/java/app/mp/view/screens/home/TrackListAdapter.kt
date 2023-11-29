@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.mp.databinding.ItemViewTrackBinding
-import app.mp.model.local.entity.TrackEntity
+import app.mp.model.model.Track
 
-class NoteListAdapter :
-    ListAdapter<TrackEntity, NoteListAdapter.ViewHolder>(NoteComparator()) {
+class TrackListAdapter :
+    ListAdapter<Track, TrackListAdapter.ViewHolder>(TrackComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -29,16 +29,16 @@ class NoteListAdapter :
             textView = binding.tvNoteTitle
         }
 
-        fun bind(track: TrackEntity) {
-            textView.text = track.title
+        fun bind(track: Track) {
+            textView.text = track.name
         }
     }
 
-    class NoteComparator : DiffUtil.ItemCallback<TrackEntity>() {
-        override fun areItemsTheSame(oldItem: TrackEntity, newItem: TrackEntity) = oldItem.id == newItem.id
+    class TrackComparator : DiffUtil.ItemCallback<Track>() {
+        override fun areItemsTheSame(oldItem: Track, newItem: Track) = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: TrackEntity, newItem: TrackEntity) =
-            oldItem.title == newItem.title
+        override fun areContentsTheSame(oldItem: Track, newItem: Track) =
+            oldItem.name == newItem.name
 
     }
 }

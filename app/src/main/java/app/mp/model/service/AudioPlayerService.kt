@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AudioPlayerService : MediaSessionService() {
-    private lateinit var audioPlayer: AudioPlayer
+    lateinit var audioPlayer: AudioPlayer
     private lateinit var notification: AudioPlayerNotification
     private val binder = LocalBinder()
     val player
@@ -79,14 +79,6 @@ class AudioPlayerService : MediaSessionService() {
             /* notification = */ notification.self,
             /* foregroundServiceType = */ serviceType,
         )
-
-        audioPlayer.addAudiosFromUri(
-            listOf(
-                "https://cdn.freesound.org/previews/680/680316_10399452-hq.mp3",
-                "https://cdn.freesound.org/previews/213/213524_862453-hq.mp3"
-            )
-        )
-        audioPlayer.play()
     }
 
     private fun updatePlayerOnAction(action: String?) {
