@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import app.mp.common.util.ResponseResult
 import app.mp.common.util.media.AudioPlayerState
+import app.mp.common.util.network.ResponseResult
 import app.mp.model.mapper.toModel
 import app.mp.model.model.Track
 import app.mp.model.repo.def.TrackRepository

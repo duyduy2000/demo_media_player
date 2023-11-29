@@ -1,7 +1,8 @@
 package app.mp.model.repo.def
 
-import app.mp.common.util.ResponseResult
+import app.mp.common.util.network.ResponseResult
 import app.mp.model.remote.dto.TrackDto
+import app.mp.model.remote.dto.TrackListDto
 import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
@@ -12,5 +13,9 @@ interface TrackRepository {
 //    suspend fun deleteTracks(trackList: List<TrackEntity>)
 
     suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>>
+
+    suspend fun getSimilarTracks(trackId: Int): Flow<ResponseResult<TrackListDto>>
+
+    suspend fun getTracksByTextSearch(query: String): Flow<ResponseResult<TrackListDto>>
 
 }

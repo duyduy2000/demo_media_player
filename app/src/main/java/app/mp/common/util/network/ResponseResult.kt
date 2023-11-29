@@ -1,4 +1,4 @@
-package app.mp.common.util
+package app.mp.common.util.network
 
 sealed class ResponseResult<T>(val data: T?, val errorMessage: String?) {
 

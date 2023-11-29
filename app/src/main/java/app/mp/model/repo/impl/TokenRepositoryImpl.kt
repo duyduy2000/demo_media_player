@@ -1,8 +1,8 @@
 package app.mp.model.repo.impl
 
-import app.mp.common.util.ResponseResult
-import app.mp.model.remote.dto.AccessTokenDto
+import app.mp.common.util.network.ResponseResult
 import app.mp.model.remote.api.FreesoundApi
+import app.mp.model.remote.dto.AccessTokenDto
 import app.mp.model.repo.def.TokenRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

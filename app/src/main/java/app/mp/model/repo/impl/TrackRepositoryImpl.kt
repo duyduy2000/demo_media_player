@@ -1,36 +1,37 @@
 package app.mp.model.repo.impl
 
-import android.util.Log
-import app.mp.common.util.ResponseResult
 import app.mp.common.util.getApiKey
-import app.mp.model.remote.dto.TrackDto
+import app.mp.common.util.network.ResponseResult
+import app.mp.common.util.network.handleApiCall
 import app.mp.model.remote.api.FreesoundApi
+import app.mp.model.remote.dto.TrackDto
+import app.mp.model.remote.dto.TrackListDto
 import app.mp.model.repo.def.TrackRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : TrackRepository {
     private val errorLogTag = "Track Repository Error"
 
-    override suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>> = flow {
-        try {
-            emit(ResponseResult.Unknown())
+    override suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>> {
+        return handleApiCall(
+            logTag = errorLogTag,
+            apiCall = suspend { api.getTrackById(id, token = getApiKey()) }
+        )
+    }
 
-            val response = api.getTrackById(id, token = getApiKey())
-            if (response.body() != null && response.isSuccessful) {
-                emit(ResponseResult.Success(data = response.body()!!))
-            }
+    override suspend fun getSimilarTracks(trackId: Int): Flow<ResponseResult<TrackListDto>> {
+        return handleApiCall(
+            logTag = errorLogTag,
+            apiCall = suspend { api.getSimilarTracks(trackId = trackId, token = getApiKey()) }
+        )
+    }
 
-        } catch (exception: IOException) {
-            Log.e(errorLogTag, "$exception")
-            emit(ResponseResult.Failed(errorMessage = "Internet connection might not available."))
-        } catch (exception: HttpException) {
-            Log.e(errorLogTag, "$exception")
-            emit(ResponseResult.Failed(errorMessage = "Unexpected response."))
-        }
+    override suspend fun getTracksByTextSearch(query: String): Flow<ResponseResult<TrackListDto>> {
+        return handleApiCall(
+            logTag = errorLogTag,
+            apiCall = suspend { api.getTracksByTextSearch(query = query, token = getApiKey()) }
+        )
     }
 
 }
