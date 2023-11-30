@@ -14,8 +14,8 @@ interface TrackRepository {
 
     suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>>
 
-    suspend fun getSimilarTracks(trackId: Int): Flow<ResponseResult<TrackListDto>>
+    suspend fun getSimilarTracks(trackId: Int, pageIndex: Int = 1): Flow<ResponseResult<TrackListDto>>
 
-    suspend fun getTracksByTextSearch(query: String): Flow<ResponseResult<TrackListDto>>
+    suspend fun getTracksByTextSearch(query: String, pageIndex: Int = 1): Flow<ResponseResult<TrackListDto>>
 
 }

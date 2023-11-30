@@ -20,19 +20,33 @@ class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : T
         )
     }
 
-    override suspend fun getSimilarTracks(trackId: Int): Flow<ResponseResult<TrackListDto>> {
-        return handleApiCall(
-            logTag = errorLogTag,
-            apiCall = suspend { api.getSimilarTracks(trackId = trackId, token = getApiKey()) }
-        )
-    }
+    override suspend fun getSimilarTracks(
+        trackId: Int,
+        pageIndex: Int,
+    ): Flow<ResponseResult<TrackListDto>> = handleApiCall(
+        logTag = errorLogTag,
+        apiCall = suspend {
+            api.getSimilarTracks(
+                trackId = trackId,
+                token = getApiKey(),
+                pageIndex = pageIndex,
+            )
+        }
+    )
 
-    override suspend fun getTracksByTextSearch(query: String): Flow<ResponseResult<TrackListDto>> {
-        return handleApiCall(
-            logTag = errorLogTag,
-            apiCall = suspend { api.getTracksByTextSearch(query = query, token = getApiKey()) }
-        )
-    }
+    override suspend fun getTracksByTextSearch(
+        query: String,
+        pageIndex: Int,
+    ): Flow<ResponseResult<TrackListDto>> = handleApiCall(
+        logTag = errorLogTag,
+        apiCall = suspend {
+            api.getTracksByTextSearch(
+                query = query,
+                token = getApiKey(),
+                pageIndex = pageIndex,
+            )
+        }
+    )
 
 }
 

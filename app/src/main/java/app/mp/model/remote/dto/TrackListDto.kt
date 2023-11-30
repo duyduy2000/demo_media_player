@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TrackListDto(
     @SerialName("count") val count: Int,
-    @SerialName("previous") val previous: String,
-    @SerialName("next") val next: String,
+    @SerialName("previous") val previous: String?,
+    @SerialName("next") val next: String?,
     @SerialName("results") val trackList: List<Track>
 ) {
     @Serializable

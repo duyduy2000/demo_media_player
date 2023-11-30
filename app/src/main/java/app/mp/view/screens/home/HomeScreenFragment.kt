@@ -38,7 +38,9 @@ class HomeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getTrack()
+        viewModel.apply {
+            getSimilarTrack()
+        }
 
         AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
             .apply {
@@ -49,10 +51,7 @@ class HomeScreenFragment : Fragment() {
         viewModel.trackList.observe(viewLifecycleOwner) {
             trackListAdapter.submitList(it)
             if (playerServiceBinder.isBound && it!!.isNotEmpty()) {
-                playerServiceBinder.service.audioPlayer.addAudiosFromUri(viewModel.trackList.value!!.map { track ->
-                    track.previewHqMp3
-                })
-                playerServiceBinder.service.audioPlayer.play()
+                playerServiceBinder.service.audioPlayer.addAudios(it)
             }
         }
 
@@ -62,7 +61,6 @@ class HomeScreenFragment : Fragment() {
                 playerView.btnPlay.setImageResource(R.drawable.round_pause_36)
             else
                 playerView.btnPlay.setImageResource(R.drawable.round_play_arrow_36)
-
         }
 
         viewModel.currentTrackState.observe(viewLifecycleOwner) {

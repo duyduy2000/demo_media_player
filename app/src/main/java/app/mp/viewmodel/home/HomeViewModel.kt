@@ -32,14 +32,30 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             trackRepository.getTrackFromId(680316).collect {
                 when (it) {
-                    is ResponseResult.Failed -> currentTrackState
+                    is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
                         val track = it.data!!.toModel()
                         audioPlayerState.currentTrackState.update { info -> info.copy(name = track.name) }
                         _trackList.value = _trackList.value!!.plus(track)
                     }
 
-                    is ResponseResult.Unknown -> currentTrackState
+                    is ResponseResult.Unknown -> Unit
+                }
+            }
+        }
+    }
+
+    fun getSimilarTrack() {
+        viewModelScope.launch {
+            trackRepository.getSimilarTracks(680316).collect {
+                when (it) {
+                    is ResponseResult.Failed -> Unit
+                    is ResponseResult.Success -> {
+                        val trackList = it.data!!.toModel()
+                        _trackList.value = _trackList.value!!.plus(trackList)
+                    }
+
+                    is ResponseResult.Unknown -> Unit
                 }
             }
         }

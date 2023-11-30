@@ -1,5 +1,6 @@
 package app.mp.common.util.media
 
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import kotlinx.coroutines.flow.update
 
@@ -32,4 +33,13 @@ class PlayerListener(
         notification.updateOnPlayerStateChange()
         super.onRepeatModeChanged(repeatMode)
     }
+
+    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+        super.onMediaItemTransition(mediaItem, reason)
+        notification.updateOnPlayerStateChange()
+        mediaItem?.let { item ->
+            state.currentTrackState.update { state.currentTrackState.value.copy(name = item.mediaMetadata.title.toString()) }
+        }
+    }
+
 }

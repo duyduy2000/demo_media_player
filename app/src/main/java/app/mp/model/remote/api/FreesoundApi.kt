@@ -15,7 +15,7 @@ interface FreesoundApi {
         @Query("token") token: String
     ): Response<TrackDto>
 
-    @GET("sounds/<id>/similar/")
+    @GET("sounds/{id}/similar/")
     suspend fun getSimilarTracks(
         @Path("id") trackId: Int,
         @Query("token") token: String,

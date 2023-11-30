@@ -55,8 +55,8 @@ class AudioPlayerNotification(private val service: Service, private val audioPla
                 "Next",
                 getActionIntent(Action.STOP)
             )
-            .setContentTitle("Sample Track")
-            .setContentText("Unknown Artist")
+            .setContentTitle(player.currentMediaItem?.mediaMetadata?.title ?: "Unknown")
+            .setContentText(player.currentMediaItem?.mediaMetadata?.artist ?: "Unknown")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(MediaStyle().setShowActionsInCompactView(0, 1, 2))
             .build()
