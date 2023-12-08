@@ -14,6 +14,9 @@
         android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:shadowColor="@color/gray"
+        android:shadowRadius="4"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
@@ -30,6 +33,9 @@
         android:layout_marginBottom="16dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:shadowColor="@color/gray"
+        android:shadowRadius="4"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_audio_title"
         app:layout_constraintHorizontal_bias="1.0"
@@ -42,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.7"/>
+        app:layout_constraintGuide_percent="0.7" />
 
     <ImageView
         android:id="@+id/img_audio_playing"

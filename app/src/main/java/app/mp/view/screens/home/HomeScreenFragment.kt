@@ -65,7 +65,7 @@ class HomeScreenFragment : Fragment() {
 
         viewModel.currentTrackState.observe(viewLifecycleOwner) {
             val playerView = binding.playerView
-            playerView.txtName.text = it.name
+            playerView.txtName.text = if (it.name != "") it.name else "No audio"
         }
 
         PlayerButtons(

@@ -23,6 +23,7 @@ class PlayerListener(
     }
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+        stopPlayerWhenListEmpty()
         state.playerState.update { state.playerState.value.copy(isPlaying = playWhenReady) }
         notification.updateOnPlayerStateChange()
         super.onPlayWhenReadyChanged(playWhenReady, reason)
@@ -42,4 +43,9 @@ class PlayerListener(
         }
     }
 
+    private fun stopPlayerWhenListEmpty() {
+        if (player.mediaItemCount == 0) {
+            player.pause()
+        }
+    }
 }
