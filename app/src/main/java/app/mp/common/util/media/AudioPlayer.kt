@@ -13,7 +13,7 @@ import androidx.media3.session.MediaSession
 import app.mp.model.model.Track
 
 class AudioPlayer(context: Context) {
-    var mediaSession: MediaSession? = null
+    var mediaSession: MediaSession?
         private set
 
     init {
@@ -30,27 +30,12 @@ class AudioPlayer(context: Context) {
         mediaSession = MediaSession.Builder(context, player).build()
     }
 
-    fun play() = mediaSession?.player?.play()
-
-    fun pause() = mediaSession?.player?.pause()
-
     fun release() {
         mediaSession?.apply {
             player.release()
             release()
             mediaSession = null
         }
-    }
-
-    fun addAudiosFromUri(uriList: List<String>) = mediaSession?.player?.apply {
-        for (uri in uriList) {
-            addMediaItem(
-                MediaItem.Builder()
-                    .setUri(uri)
-                    .build()
-            )
-        }
-        prepare()
     }
 
     fun addAudios(trackList: List<Track>) = mediaSession?.player?.apply {
@@ -72,5 +57,17 @@ class AudioPlayer(context: Context) {
             )
         }
         prepare()
+    }
+
+    companion object {
+        fun Player.goToNextMediaItem() {
+            seekToNextMediaItem()
+            if (!playWhenReady) play()
+        }
+
+        fun Player.goToPrevMediaItem() {
+            seekToPreviousMediaItem()
+            if (!playWhenReady) play()
+        }
     }
 }

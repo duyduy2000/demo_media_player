@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import app.mp.databinding.ItemViewTrackBinding
+import app.mp.databinding.ItemViewAudioBinding
 import app.mp.model.model.Track
 
 class TrackListAdapter :
@@ -14,7 +14,7 @@ class TrackListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            ItemViewTrackBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemViewAudioBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding = view)
     }
 
@@ -22,15 +22,18 @@ class TrackListAdapter :
         holder.bind(track = getItem(position))
     }
 
-    class ViewHolder(binding: ItemViewTrackBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val textView: TextView
+    class ViewHolder(binding: ItemViewAudioBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val audioTitle: TextView
+        private val authorTitle: TextView
 
         init {
-            textView = binding.tvNoteTitle
+            audioTitle = binding.tvAudioTitle
+            authorTitle = binding.tvAudioAuthor
         }
 
         fun bind(track: Track) {
-            textView.text = track.name
+            audioTitle.text = track.name
+            authorTitle.text = track.username
         }
     }
 
@@ -38,7 +41,7 @@ class TrackListAdapter :
         override fun areItemsTheSame(oldItem: Track, newItem: Track) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Track, newItem: Track) =
-            oldItem.name == newItem.name
+            oldItem.name == newItem.name && oldItem.username == newItem.username
 
     }
 }

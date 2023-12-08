@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="item_name">item 0</string>
+    <string name="audio_name">Audio 0</string>
     <string name="emptyDescription">" "</string>
     <string name="unknown_track">Unknown Track Unknown Track Unknown Track</string>
+    <string name="unknown_author">Unknown Author Unknown Author Unknown Author</string>
 </resources>

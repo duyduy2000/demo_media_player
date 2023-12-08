@@ -1,12 +1,13 @@
 package app.mp.view.screens.home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import app.mp.R
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.FragmentHomeScreenBinding
@@ -32,21 +33,20 @@ class HomeScreenFragment : Fragment() {
     ): View {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
         binding.rvNoteList.adapter = trackListAdapter
+        val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        binding.rvNoteList.addItemDecoration(divider)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.apply {
-            getSimilarTrack()
-        }
-
         AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
             .apply {
-                requireActivity().startService(this)
-                requireActivity().bindService(this, playerServiceBinder, Context.BIND_AUTO_CREATE)
+                requireContext().startService(this)
             }
+        playerServiceBinder.bindServiceTo(this)
+
+        viewModel.getSimilarTrack()
 
         viewModel.trackList.observe(viewLifecycleOwner) {
             trackListAdapter.submitList(it)
@@ -77,10 +77,14 @@ class HomeScreenFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        playerServiceBinder.bindServiceTo(this)
+    }
+
     override fun onStop() {
         super.onStop()
-        requireActivity().unbindService(playerServiceBinder)
-        playerServiceBinder.isBound = false
+        playerServiceBinder.unbindServiceFrom(this)
     }
 
     override fun onDestroyView() {

@@ -12,6 +12,8 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import app.mp.common.util.PermissionHandler
 import app.mp.common.util.media.AudioPlayer
+import app.mp.common.util.media.AudioPlayer.Companion.goToNextMediaItem
+import app.mp.common.util.media.AudioPlayer.Companion.goToPrevMediaItem
 import app.mp.common.util.media.AudioPlayerNotification
 import app.mp.common.util.media.AudioPlayerState
 import app.mp.common.util.media.PlayerListener
@@ -89,8 +91,8 @@ class AudioPlayerService : MediaSessionService() {
             Action.PLAY.name -> player.play()
             Action.REPEAT_ONE.name -> player.repeatMode = Player.REPEAT_MODE_ONE
             Action.REPEAT_ALL.name -> player.repeatMode = Player.REPEAT_MODE_ALL
-            Action.NEXT.name -> player.seekToNextMediaItem()
-            Action.PREVIOUS.name -> player.seekToPreviousMediaItem()
+            Action.NEXT.name -> player.goToNextMediaItem()
+            Action.PREVIOUS.name -> player.goToPrevMediaItem()
         }
     }
 

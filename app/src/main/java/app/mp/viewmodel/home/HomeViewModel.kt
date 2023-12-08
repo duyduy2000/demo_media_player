@@ -28,9 +28,9 @@ class HomeViewModel @Inject constructor(
     val playerState = audioPlayerState.playerState.asLiveData()
     val currentTrackState = audioPlayerState.currentTrackState.asLiveData()
 
-    fun getTrack() {
+    fun getTrack(trackId: Int = 680316) {
         viewModelScope.launch {
-            trackRepository.getTrackFromId(680316).collect {
+            trackRepository.getTrackFromId(trackId).collect {
                 when (it) {
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
@@ -45,9 +45,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getSimilarTrack() {
+    fun getSimilarTrack(trackId: Int = 680316) {
         viewModelScope.launch {
-            trackRepository.getSimilarTracks(680316).collect {
+            trackRepository.getSimilarTracks(trackId).collect {
                 when (it) {
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
