@@ -9,7 +9,7 @@ import app.mp.common.util.media.AudioPlayerState
 import app.mp.common.util.network.ResponseResult
 import app.mp.model.mapper.toModel
 import app.mp.model.model.Track
-import app.mp.model.repo.def.TrackRepository
+import app.mp.model.repo.def.AudioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val trackRepository: TrackRepository,
+    private val audioRepository: AudioRepository,
     private val audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
 
     fun getTrack(trackId: Int = 680316) {
         viewModelScope.launch {
-            trackRepository.getTrackFromId(trackId).collect {
+            audioRepository.getTrackFromId(trackId).collect {
                 when (it) {
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
@@ -47,7 +47,7 @@ class HomeViewModel @Inject constructor(
 
     fun getSimilarTrack(trackId: Int = 680316) {
         viewModelScope.launch {
-            trackRepository.getSimilarTracks(trackId).collect {
+            audioRepository.getSimilarTracks(trackId).collect {
                 when (it) {
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {

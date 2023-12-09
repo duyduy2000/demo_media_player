@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -34,6 +35,8 @@ class HomeScreenFragment : Fragment() {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
         binding.rvNoteList.adapter = trackListAdapter
         val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        val dividerView = ContextCompat.getDrawable(requireContext(), R.drawable.divider_audio_list)!!
+        divider.setDrawable(dividerView)
         binding.rvNoteList.addItemDecoration(divider)
         return binding.root
     }
@@ -65,6 +68,8 @@ class HomeScreenFragment : Fragment() {
 
         viewModel.currentTrackState.observe(viewLifecycleOwner) {
             val playerView = binding.playerView
+
+            // Audio's name will be blank if there is no audio in playlist
             playerView.txtName.text = if (it.name != "") it.name else "No audio"
         }
 

@@ -13,4 +13,21 @@ data class Track(
     val downloadNumber: Int,
     val averageRating: Double,
     val previewHqMp3: String,
-)
+) {
+    override fun toString(): String {
+        return "Track (\n" +
+                "id = $id,\n" +
+                "url = \"$url\",\n" +
+                "name = \"$name\",\n" +
+                "tags = \"$tags\",\n" +
+                "description = \"$description\",\n" +
+                "type = \"$type\",\n" +
+                "duration = $duration,\n" +
+                "created = \"$created\",\n" +
+                "username = \"$username\",\n" +
+                "downloadNumber = $downloadNumber,\n" +
+                "averageRating = $averageRating,\n" +
+                "previewHqMp3 = \"$previewHqMp3\",\n" +
+                ")\n"
+    }
+}

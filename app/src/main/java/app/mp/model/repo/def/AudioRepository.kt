@@ -5,7 +5,7 @@ import app.mp.model.remote.dto.TrackDto
 import app.mp.model.remote.dto.TrackListDto
 import kotlinx.coroutines.flow.Flow
 
-interface TrackRepository {
+interface AudioRepository {
 
 //    val allTracks: Flow<List<TrackEntity>>
 //    suspend fun addTrack(track: TrackEntity)

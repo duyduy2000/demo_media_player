@@ -6,11 +6,11 @@ import app.mp.common.util.network.handleApiCall
 import app.mp.model.remote.api.FreesoundApi
 import app.mp.model.remote.dto.TrackDto
 import app.mp.model.remote.dto.TrackListDto
-import app.mp.model.repo.def.TrackRepository
+import app.mp.model.repo.def.AudioRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : TrackRepository {
+class AudioRepositoryImpl @Inject constructor(private val api: FreesoundApi) : AudioRepository {
     private val errorLogTag = "Track Repository Error"
 
     override suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>> {
