@@ -38,7 +38,7 @@ class AudioPlayer(context: Context) {
         }
     }
 
-    fun addAudios(trackList: List<Track>) = mediaSession?.player?.apply {
+    fun addTracks(trackList: List<Track>) = mediaSession?.player?.apply {
         for (track in trackList) {
             addMediaItem(
                 MediaItem.Builder()

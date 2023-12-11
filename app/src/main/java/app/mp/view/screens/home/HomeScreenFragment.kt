@@ -24,8 +24,8 @@ class HomeScreenFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<HomeViewModel>()
-    private val trackListAdapter = TrackListAdapter()
     private val playerServiceBinder = PlayerServiceBinder()
+    private val trackListAdapter = TrackListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,19 +34,14 @@ class HomeScreenFragment : Fragment() {
     ): View {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
         binding.rvNoteList.adapter = trackListAdapter
-        val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
-        val dividerView = ContextCompat.getDrawable(requireContext(), R.drawable.divider_audio_list)!!
-        divider.setDrawable(dividerView)
-        binding.rvNoteList.addItemDecoration(divider)
+        addDividerToTrackListView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
-            .apply {
-                requireContext().startService(this)
-            }
+            .apply { requireContext().startService(this) }
         playerServiceBinder.bindServiceTo(this)
 
         viewModel.getSimilarTrack()
@@ -54,32 +49,11 @@ class HomeScreenFragment : Fragment() {
         viewModel.trackList.observe(viewLifecycleOwner) {
             trackListAdapter.submitList(it)
             if (playerServiceBinder.isBound && it!!.isNotEmpty()) {
-                playerServiceBinder.service.audioPlayer.addAudios(it)
+                playerServiceBinder.service.audioPlayer.addTracks(it)
             }
         }
 
-        viewModel.playerState.observe(viewLifecycleOwner) {
-            val playerView = binding.playerView
-            if (it.isPlaying)
-                playerView.btnPlay.setImageResource(R.drawable.round_pause_36)
-            else
-                playerView.btnPlay.setImageResource(R.drawable.round_play_arrow_36)
-        }
-
-        viewModel.currentTrackState.observe(viewLifecycleOwner) {
-            val playerView = binding.playerView
-
-            // Audio's name will be blank if there is no audio in playlist
-            playerView.txtName.text = if (it.name != "") it.name else "No audio"
-        }
-
-        PlayerButtons(
-            playerBinder = playerServiceBinder,
-            btnPlay = binding.playerView.btnPlay,
-            btnNext = binding.playerView.btnNext,
-            btnPrevious = binding.playerView.btnPrev
-        ).build()
-
+        setupPlayerView()
     }
 
     override fun onResume() {
@@ -95,5 +69,31 @@ class HomeScreenFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun addDividerToTrackListView() {
+        val divider = DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL)
+        val dividerView =
+            ContextCompat.getDrawable(requireContext(), R.drawable.divider_audio_list)!!
+        divider.setDrawable(dividerView)
+        binding.rvNoteList.addItemDecoration(divider)
+    }
+
+    private fun setupPlayerView() {
+        BottomPlayerViewListener(
+            view = binding.playerView,
+            viewModel = viewModel,
+            lifecycleOwner = viewLifecycleOwner
+        ).apply {
+            listenToPlayerStateChange()
+            listenToCurrentTrackStateChange()
+        }
+
+        PlayerButtons(
+            playerBinder = playerServiceBinder,
+            btnPlay = binding.playerView.btnPlay,
+            btnNext = binding.playerView.btnNext,
+            btnPrevious = binding.playerView.btnPrev
+        ).build()
     }
 }
