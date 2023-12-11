@@ -10,6 +10,7 @@ import androidx.media3.common.PercentageRating
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
+import app.mp.model.model.LocalTrack
 import app.mp.model.model.Track
 
 class AudioPlayer(context: Context) {
@@ -51,6 +52,24 @@ class AudioPlayer(context: Context) {
                             .setArtist(track.username)
                             .setDescription(track.description)
                             .setUserRating(PercentageRating(track.averageRating.toFloat()))
+                            .build()
+                    )
+                    .build()
+            )
+        }
+        prepare()
+    }
+
+    fun addLocalTracks(trackList: List<LocalTrack>) = mediaSession?.player?.apply {
+        for (track in trackList) {
+            addMediaItem(
+                MediaItem.Builder()
+                    .setMediaId(track.id.toString())
+                    .setUri(track.uri)
+                    .setMediaMetadata(
+                        MediaMetadata.Builder()
+                            .setTitle(track.name)
+                            .setArtist(track.author)
                             .build()
                     )
                     .build()

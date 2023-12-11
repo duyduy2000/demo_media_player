@@ -45,10 +45,11 @@ class HomeScreenFragment : Fragment() {
         playerServiceBinder.bindServiceTo(this)
 
         viewModel.getSimilarTrack()
+        viewModel.getAllLocalTracks(requireContext())
 
         viewModel.trackList.observe(viewLifecycleOwner) {
             trackListAdapter.submitList(it)
-            if (playerServiceBinder.isBound && it!!.isNotEmpty()) {
+            if (playerServiceBinder.isBound && it.isNotEmpty()) {
                 playerServiceBinder.service.audioPlayer.addTracks(it)
             }
         }
@@ -81,9 +82,7 @@ class HomeScreenFragment : Fragment() {
 
     private fun setupPlayerView() {
         BottomPlayerViewListener(
-            view = binding.playerView,
-            viewModel = viewModel,
-            lifecycleOwner = viewLifecycleOwner
+            view = binding.playerView, viewModel = viewModel, lifecycleOwner = viewLifecycleOwner
         ).apply {
             listenToPlayerStateChange()
             listenToCurrentTrackStateChange()
@@ -96,4 +95,5 @@ class HomeScreenFragment : Fragment() {
             btnPrevious = binding.playerView.btnPrev
         ).build()
     }
+
 }
