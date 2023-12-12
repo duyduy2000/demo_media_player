@@ -1,9 +1,11 @@
 package app.mp.common.util
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 object PermissionHandler {
@@ -36,5 +38,13 @@ object PermissionHandler {
             context,
             permission
         ) == PackageManager.PERMISSION_GRANTED
+
+    fun requestPermission(activity: Activity, permissions: Array<String>) {
+        ActivityCompat.requestPermissions(
+            /* activity = */ activity,
+            /* permissions = */ permissions,
+            /* requestCode = */ 0
+        )
+    }
 
 }

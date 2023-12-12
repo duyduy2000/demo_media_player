@@ -3,6 +3,7 @@ package app.mp.common.util.media
 import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
+import android.os.Build
 import android.provider.MediaStore
 import app.mp.common.util.PermissionHandler
 import app.mp.model.model.LocalTrack
@@ -10,32 +11,6 @@ import kotlinx.coroutines.flow.flow
 
 class LocalAudioStorage(private val context: Context) {
     fun getAllLocalAudios() = flow {
-        accessLocalAudioStorage {
-            while (it.moveToNext()) {
-                val id = it.getLong(it.getColumnIndexOrThrow(AudioStore._ID))
-                val author =
-                    if (it.getString(it.getColumnIndexOrThrow(AudioStore.ARTIST)) == "<unknow>") "Unknow Author"
-                    else it.getString(it.getColumnIndexOrThrow(AudioStore.ARTIST))
-
-                emit(
-                    LocalTrack(
-                        id = id,
-                        name = it.getString(it.getColumnIndexOrThrow(AudioStore.DISPLAY_NAME)),
-                        author = author,
-                        duration = it.getInt(it.getColumnIndexOrThrow(AudioStore.DURATION)),
-                        fileSize = it.getInt(it.getColumnIndexOrThrow(AudioStore.SIZE)),
-                        uri = ContentUris.withAppendedId(
-                            /* contentUri = */ AudioStore.EXTERNAL_CONTENT_URI,
-                            /* id = */ id
-                        ),
-                    )
-                )
-            }
-        }
-
-    }
-
-    private suspend fun accessLocalAudioStorage(onCursorMove: suspend (cursor: Cursor) -> Unit) {
         val projection = arrayOf(
             AudioStore._ID,
             AudioStore.DISPLAY_NAME,
@@ -43,20 +18,45 @@ class LocalAudioStorage(private val context: Context) {
             AudioStore.DURATION,
             AudioStore.SIZE
         )
+        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            AudioStore.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        else
+            AudioStore.EXTERNAL_CONTENT_URI
 
         if (PermissionHandler.checkMediaStoragePermission(context)) {
             context.contentResolver.query(
-                AudioStore.EXTERNAL_CONTENT_URI,
+                collection,
                 projection,
                 null,
                 null,
                 null,
                 null
-            )?.use { onCursorMove(it) }
+            )?.use {
+                while (it.moveToNext()) emit(it.getTrack())
+            }
         }
+    }
+
+    private fun Cursor.getTrack(): LocalTrack {
+        val id = this.getLong(this.getColumnIndexOrThrow(AudioStore._ID))
+        val author =
+            if (this.getString(this.getColumnIndexOrThrow(AudioStore.ARTIST)) == "<unknow>") "Unknow Author"
+            else this.getString(this.getColumnIndexOrThrow(AudioStore.ARTIST))
+
+        return LocalTrack(
+            id = id,
+            name = getString(getColumnIndexOrThrow(AudioStore.DISPLAY_NAME)),
+            author = author,
+            duration = getInt(getColumnIndexOrThrow(AudioStore.DURATION)),
+            fileSize = getInt(getColumnIndexOrThrow(AudioStore.SIZE)),
+            uri = ContentUris.withAppendedId(
+                /* contentUri = */ AudioStore.EXTERNAL_CONTENT_URI,
+                /* id = */ id
+            ),
+        )
     }
 
 
 }
 
-private typealias AudioStore = MediaStore.Video.Media
+private typealias AudioStore = MediaStore.Audio.Media

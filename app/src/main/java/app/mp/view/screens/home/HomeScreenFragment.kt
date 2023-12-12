@@ -1,6 +1,7 @@
 package app.mp.view.screens.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,13 +45,21 @@ class HomeScreenFragment : Fragment() {
             .apply { requireContext().startService(this) }
         playerServiceBinder.bindServiceTo(this)
 
-        viewModel.getSimilarTrack()
+//        viewModel.getSimilarTrack()
         viewModel.getAllLocalTracks(requireContext())
 
         viewModel.trackList.observe(viewLifecycleOwner) {
             trackListAdapter.submitList(it)
             if (playerServiceBinder.isBound && it.isNotEmpty()) {
                 playerServiceBinder.service.audioPlayer.addTracks(it)
+            }
+        }
+
+        binding.playerView.btnQueue.setOnClickListener {
+            if (playerServiceBinder.isBound && viewModel.localTrackList.value != null) {
+                playerServiceBinder.service.audioPlayer.addLocalTracks(viewModel.localTrackList.value!!)
+                Log.e("audio", playerServiceBinder.service.player.mediaItemCount.toString())
+                Log.e("audio", viewModel.localTrackList.value!!.size.toString())
             }
         }
 

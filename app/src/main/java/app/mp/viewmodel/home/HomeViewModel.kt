@@ -1,6 +1,7 @@
 package app.mp.viewmodel.home
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val trackRepository: TrackRepository,
-    private val audioPlayerState: AudioPlayerState,
+    audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
 
     private val _trackList = MutableLiveData<List<Track>>(emptyList())
@@ -52,7 +53,8 @@ class HomeViewModel @Inject constructor(
     fun getAllLocalTracks(context: Context) {
         viewModelScope.launch {
             LocalAudioStorage(context).getAllLocalAudios().collect {
-                _localTrackList.value = localTrackList.value!!.plus(it)
+                _localTrackList.value = _localTrackList.value?.plus(it)
+                Log.e("audio", it.toString())
             }
         }
     }
