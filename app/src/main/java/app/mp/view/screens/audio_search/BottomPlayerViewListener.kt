@@ -1,4 +1,4 @@
-package app.mp.view.screens.home
+package app.mp.view.screens.audio_search
 
 import androidx.lifecycle.LifecycleOwner
 import app.mp.R

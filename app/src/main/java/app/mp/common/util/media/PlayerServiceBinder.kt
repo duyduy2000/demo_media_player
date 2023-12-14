@@ -4,7 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
 import android.os.IBinder
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import app.mp.model.service.AudioPlayerService
 
 class PlayerServiceBinder : ServiceConnection {
@@ -23,13 +23,13 @@ class PlayerServiceBinder : ServiceConnection {
         isBound = false
     }
 
-    fun bindServiceTo(fragment: Fragment) {
-        fragment.apply {
+    fun bindServiceTo(activity: FragmentActivity) {
+        activity.apply {
             val intent = AudioPlayerService.getActionIntent(
-                requireContext(),
+                this,
                 AudioPlayerService.Action.START,
             )
-            requireActivity().bindService(
+            bindService(
                 intent,
                 this@PlayerServiceBinder,
                 Context.BIND_AUTO_CREATE,
@@ -37,9 +37,9 @@ class PlayerServiceBinder : ServiceConnection {
         }
     }
 
-    fun unbindServiceFrom(fragment: Fragment) {
-        fragment.apply {
-            requireContext().unbindService(this@PlayerServiceBinder)
+    fun unbindServiceFrom(activity: FragmentActivity) {
+        activity.apply {
+            unbindService(this@PlayerServiceBinder)
             isBound = false
         }
     }

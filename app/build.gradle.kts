@@ -108,6 +108,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifeCycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifeCycleVersion")
 
+    // Jetpack Navigation
+    val navVersion = "2.7.5"
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-safe-args-gradle-plugin:$navVersion")
+
     // Dagger Hilt
     val hiltVersion = "2.48.1"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
@@ -126,8 +132,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:$media3Version")
     implementation("androidx.media3:media3-common:$media3Version")
     implementation("androidx.media3:media3-session:$media3Version")
-    implementation("androidx.media:media:1.6.0")
-    implementation("androidx.media3:media3-ui:$media3Version")
+    implementation("androidx.media:media:1.7.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")
