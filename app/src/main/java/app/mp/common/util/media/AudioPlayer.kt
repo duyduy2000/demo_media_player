@@ -10,8 +10,8 @@ import androidx.media3.common.PercentageRating
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
-import app.mp.model.model.LocalTrack
-import app.mp.model.model.Track
+import app.mp.model.model.Audio
+import app.mp.model.model.LocalAudio
 
 class AudioPlayer(context: Context) {
     var mediaSession: MediaSession?
@@ -39,19 +39,19 @@ class AudioPlayer(context: Context) {
         }
     }
 
-    fun addTracks(trackList: List<Track>) = mediaSession?.player?.apply {
-        for (track in trackList) {
+    fun addAudios(audioList: List<Audio>) = mediaSession?.player?.apply {
+        for (audio in audioList) {
             addMediaItem(
                 MediaItem.Builder()
-                    .setMediaId(track.id.toString())
-                    .setTag(track.tags)
-                    .setUri(track.previewHqMp3)
+                    .setMediaId(audio.id.toString())
+                    .setTag(audio.tags)
+                    .setUri(audio.previewHqMp3)
                     .setMediaMetadata(
                         MediaMetadata.Builder()
-                            .setTitle(track.name)
-                            .setArtist(track.username)
-                            .setDescription(track.description)
-                            .setUserRating(PercentageRating(track.averageRating.toFloat()))
+                            .setTitle(audio.name)
+                            .setArtist(audio.username)
+                            .setDescription(audio.description)
+                            .setUserRating(PercentageRating(audio.averageRating.toFloat()))
                             .build()
                     )
                     .build()
@@ -60,16 +60,16 @@ class AudioPlayer(context: Context) {
         prepare()
     }
 
-    fun addLocalTracks(trackList: List<LocalTrack>) = mediaSession?.player?.apply {
-        for (track in trackList) {
+    fun addLocalTracks(audioList: List<LocalAudio>) = mediaSession?.player?.apply {
+        for (audio in audioList) {
             addMediaItem(
                 MediaItem.Builder()
-                    .setMediaId(track.id.toString())
-                    .setUri(track.uri)
+                    .setMediaId(audio.id.toString())
+                    .setUri(audio.uri)
                     .setMediaMetadata(
                         MediaMetadata.Builder()
-                            .setTitle(track.name)
-                            .setArtist(track.author)
+                            .setTitle(audio.name)
+                            .setArtist(audio.author)
                             .build()
                     )
                     .build()

@@ -4,29 +4,29 @@ import app.mp.common.util.getApiKey
 import app.mp.common.util.network.ResponseResult
 import app.mp.common.util.network.handleApiCall
 import app.mp.model.remote.api.FreesoundApi
-import app.mp.model.remote.dto.TrackDto
-import app.mp.model.remote.dto.TrackListDto
-import app.mp.model.repo.def.TrackRepository
+import app.mp.model.remote.dto.AudioDto
+import app.mp.model.remote.dto.AudioListDto
+import app.mp.model.repo.def.AudioRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : TrackRepository {
-    private val errorLogTag = "Track Repository Error"
+class AudioRepositoryImpl @Inject constructor(private val api: FreesoundApi) : AudioRepository {
+    private val errorLogTag = "Audio Repo"
 
-    override suspend fun getTrackFromId(id: Int): Flow<ResponseResult<TrackDto>> {
+    override suspend fun getAudioFromId(id: Int): Flow<ResponseResult<AudioDto>> {
         return handleApiCall(
             logTag = errorLogTag,
-            apiCall = suspend { api.getTrackById(id, token = getApiKey()) }
+            apiCall = suspend { api.getAudioById(id, token = getApiKey()) }
         )
     }
 
-    override suspend fun getSimilarTracks(
+    override suspend fun getSimilarAudios(
         trackId: Int,
         pageIndex: Int,
-    ): Flow<ResponseResult<TrackListDto>> = handleApiCall(
+    ): Flow<ResponseResult<AudioListDto>> = handleApiCall(
         logTag = errorLogTag,
         apiCall = suspend {
-            api.getSimilarTracks(
+            api.getSimilarAudios(
                 trackId = trackId,
                 token = getApiKey(),
                 pageIndex = pageIndex,
@@ -34,13 +34,13 @@ class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : T
         }
     )
 
-    override suspend fun getTracksByTextSearch(
+    override suspend fun getAudiosByTextSearch(
         query: String,
         pageIndex: Int,
-    ): Flow<ResponseResult<TrackListDto>> = handleApiCall(
+    ): Flow<ResponseResult<AudioListDto>> = handleApiCall(
         logTag = errorLogTag,
         apiCall = suspend {
-            api.getTracksByTextSearch(
+            api.getAudioByTextSearch(
                 query = query,
                 token = getApiKey(),
                 pageIndex = pageIndex,
@@ -51,8 +51,6 @@ class TrackRepositoryImpl @Inject constructor(private val api: FreesoundApi) : T
 }
 
 /*
-class TrackRepositoryImpl @Inject constructor(private val database: TrackDatabase) : TrackRepository{
-
 override val allTracks: Flow<List<TrackEntity>> = database.trackDao().getAllTracks()
 
 @WorkerThread
@@ -68,6 +66,5 @@ database.trackDao().insert(track)
 @WorkerThread
 override suspend fun deleteTracks(trackList: List<TrackEntity>) {
 database.trackDao().delete(trackList)
-}
 }
 */

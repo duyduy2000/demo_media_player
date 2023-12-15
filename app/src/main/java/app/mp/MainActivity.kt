@@ -23,17 +23,10 @@ class MainActivity : FragmentActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         PermissionHandler.askPermissionsWhenAppStarted(this)
-
         playerServiceBinder.bindServiceTo(this)
+
         viewModel.getAllLocalTracks(this)
-
         setupPlayerView()
-
-        binding.playerView.btnQueue.setOnClickListener {
-            if (playerServiceBinder.isBound && viewModel.localTrackList.value != null) {
-                playerServiceBinder.service.audioPlayer.addLocalTracks(viewModel.localTrackList.value!!)
-            }
-        }
     }
 
     override fun onResume() {
@@ -62,5 +55,11 @@ class MainActivity : FragmentActivity() {
             btnNext = binding.playerView.btnNext,
             btnPrevious = binding.playerView.btnPrev
         ).build()
+
+        binding.playerView.btnQueue.setOnClickListener {
+            if (playerServiceBinder.isBound && viewModel.localAudioList.value != null) {
+                playerServiceBinder.service.audioPlayer.addLocalTracks(viewModel.localAudioList.value!!)
+            }
+        }
     }
 }

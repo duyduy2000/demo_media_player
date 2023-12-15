@@ -10,24 +10,24 @@ import app.mp.common.util.media.AudioPlayerState
 import app.mp.common.util.media.LocalAudioStorage
 import app.mp.common.util.network.ResponseResult
 import app.mp.model.mapper.toModel
-import app.mp.model.model.LocalTrack
-import app.mp.model.model.Track
-import app.mp.model.repo.def.TrackRepository
+import app.mp.model.model.Audio
+import app.mp.model.model.LocalAudio
+import app.mp.model.repo.def.AudioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val trackRepository: TrackRepository,
+    private val audioRepository: AudioRepository,
     audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
 
-    private val _trackList = MutableLiveData<List<Track>>(emptyList())
-    val trackList: LiveData<List<Track>> get() = _trackList
+    private val _audioList = MutableLiveData<List<Audio>>(emptyList())
+    val audioList: LiveData<List<Audio>> get() = _audioList
 
-    private val _localTrackList = MutableLiveData<List<LocalTrack>>(emptyList())
-    val localTrackList: LiveData<List<LocalTrack>> get() = _localTrackList
+    private val _localAudioList = MutableLiveData<List<LocalAudio>>(emptyList())
+    val localAudioList: LiveData<List<LocalAudio>> get() = _localAudioList
 
 
     val playerState = audioPlayerState.playerState.asLiveData()
@@ -35,12 +35,12 @@ class HomeViewModel @Inject constructor(
 
     fun getSimilarTrack(trackId: Int = 680316) {
         viewModelScope.launch {
-            trackRepository.getSimilarTracks(trackId).collect {
+            audioRepository.getSimilarAudios(trackId).collect {
                 when (it) {
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
                         val trackList = it.data!!.toModel()
-                        _trackList.value = _trackList.value!!.plus(trackList)
+                        _audioList.value = _audioList.value!!.plus(trackList)
                     }
 
                     is ResponseResult.Unknown -> Unit
@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
     fun getAllLocalTracks(context: Context) {
         viewModelScope.launch {
             LocalAudioStorage(context).getAllLocalAudios().collect {
-                _localTrackList.value = _localTrackList.value?.plus(it)
+                _localAudioList.value = _localAudioList.value?.plus(it)
             }
         }
     }

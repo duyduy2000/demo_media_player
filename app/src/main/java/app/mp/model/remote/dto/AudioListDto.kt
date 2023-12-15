@@ -5,14 +5,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TrackListDto(
+data class AudioListDto(
     @SerialName("count") val count: Int,
     @SerialName("previous") val previous: String?,
     @SerialName("next") val next: String?,
-    @SerialName("results") val trackList: List<Track>
+    @SerialName("results") val audioList: List<Audio>
 ) {
     @Serializable
-    data class Track(
+    data class Audio(
         @SerialName("id") val id: Int,
         @SerialName("url") val url: String,
         @SerialName("name") val name: String,
@@ -38,7 +38,7 @@ data class TrackListDto(
     }
 
     companion object {
-        const val trackFields =
+        const val infoFields =
             "id,url,name,tags,description,created,type,filesize,duration,username,previews,num_downloads,avg_rating"
     }
 }

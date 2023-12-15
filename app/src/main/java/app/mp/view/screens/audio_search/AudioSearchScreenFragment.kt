@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.mp.R
 import app.mp.databinding.FragmentAudioSearchScreenBinding
-import app.mp.model.service.AudioPlayerService
 import app.mp.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,11 +36,11 @@ class AudioSearchScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AudioPlayerService.getActionIntent(requireContext(), AudioPlayerService.Action.START)
-            .apply { requireContext().startService(this) }
 
         viewModel.getSimilarTrack()
+        viewModel.audioList.observe(viewLifecycleOwner) {
 
+        }
     }
 
     override fun onDestroyView() {

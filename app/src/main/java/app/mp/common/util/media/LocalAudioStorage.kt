@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.os.Build
 import android.provider.MediaStore
 import app.mp.common.util.PermissionHandler
-import app.mp.model.model.LocalTrack
+import app.mp.model.model.LocalAudio
 import kotlinx.coroutines.flow.flow
 
 class LocalAudioStorage(private val context: Context) {
@@ -32,18 +32,18 @@ class LocalAudioStorage(private val context: Context) {
                 null,
                 null
             )?.use {
-                while (it.moveToNext()) emit(it.getTrack())
+                while (it.moveToNext()) emit(it.getAudio())
             }
         }
     }
 
-    private fun Cursor.getTrack(): LocalTrack {
+    private fun Cursor.getAudio(): LocalAudio {
         val id = this.getLong(this.getColumnIndexOrThrow(AudioStore._ID))
         val author =
             if (this.getString(this.getColumnIndexOrThrow(AudioStore.ARTIST)) == "<unknow>") "Unknow Author"
             else this.getString(this.getColumnIndexOrThrow(AudioStore.ARTIST))
 
-        return LocalTrack(
+        return LocalAudio(
             id = id,
             name = getString(getColumnIndexOrThrow(AudioStore.DISPLAY_NAME)),
             author = author,

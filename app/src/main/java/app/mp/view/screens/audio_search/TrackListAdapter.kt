@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import app.mp.databinding.ItemViewAudioBinding
-import app.mp.model.model.Track
+import app.mp.model.model.Audio
 
 class TrackListAdapter :
-    ListAdapter<Track, TrackListAdapter.ViewHolder>(TrackComparator()) {
+    ListAdapter<Audio, TrackListAdapter.ViewHolder>(TrackComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -19,7 +19,7 @@ class TrackListAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(track = getItem(position))
+        holder.bind(audio = getItem(position))
     }
 
     class ViewHolder(binding: ItemViewAudioBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -31,16 +31,16 @@ class TrackListAdapter :
             authorTitle = binding.tvAudioAuthor
         }
 
-        fun bind(track: Track) {
-            audioTitle.text = track.name
-            authorTitle.text = track.username
+        fun bind(audio: Audio) {
+            audioTitle.text = audio.name
+            authorTitle.text = audio.username
         }
     }
 
-    class TrackComparator : DiffUtil.ItemCallback<Track>() {
-        override fun areItemsTheSame(oldItem: Track, newItem: Track) = oldItem.id == newItem.id
+    class TrackComparator : DiffUtil.ItemCallback<Audio>() {
+        override fun areItemsTheSame(oldItem: Audio, newItem: Audio) = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Track, newItem: Track) =
+        override fun areContentsTheSame(oldItem: Audio, newItem: Audio) =
             oldItem.name == newItem.name && oldItem.username == newItem.username
 
     }

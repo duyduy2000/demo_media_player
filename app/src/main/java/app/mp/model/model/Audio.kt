@@ -1,6 +1,6 @@
 package app.mp.model.model
 
-data class Track(
+data class Audio(
     val id: Int,
     val url: String,
     val name: String,
