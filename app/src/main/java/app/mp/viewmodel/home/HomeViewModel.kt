@@ -1,7 +1,6 @@
 package app.mp.viewmodel.home
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,7 +53,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             LocalAudioStorage(context).getAllLocalAudios().collect {
                 _localTrackList.value = _localTrackList.value?.plus(it)
-                Log.e("audio", it.toString())
             }
         }
     }
