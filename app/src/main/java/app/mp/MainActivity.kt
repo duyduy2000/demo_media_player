@@ -10,13 +10,16 @@ import app.mp.view.screens.audio_search.BottomPlayerViewListener
 import app.mp.view.widget.player.PlayerButtons
 import app.mp.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val playerServiceBinder = PlayerServiceBinder()
     private val viewModel by viewModels<HomeViewModel>()
+
+    @Inject
+    lateinit var playerServiceBinder: PlayerServiceBinder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

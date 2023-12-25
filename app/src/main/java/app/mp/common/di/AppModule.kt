@@ -1,6 +1,7 @@
 package app.mp.common.di
 
 import app.mp.common.util.media.AudioPlayerState
+import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.model.remote.api.FreesoundApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -35,4 +36,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAudioPlayerState() = AudioPlayerState()
+
+    @Provides
+    @Singleton
+    fun provideAudioServiceBinder() = PlayerServiceBinder()
 }
