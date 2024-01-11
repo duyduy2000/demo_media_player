@@ -6,8 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import app.mp.common.util.PermissionHandler
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.ActivityMainBinding
-import app.mp.view.screens.audio_search.BottomPlayerViewListener
-import app.mp.view.widget.player.PlayerButtons
+import app.mp.view.widget.player.BottomPlayerView
 import app.mp.viewmodel.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -29,7 +28,11 @@ class MainActivity : FragmentActivity() {
         playerServiceBinder.bindServiceTo(this)
 
         viewModel.getAllLocalTracks(this)
-        setupPlayerView()
+        BottomPlayerView(
+            view = binding.playerView,
+            viewModel = viewModel,
+            activity = this,
+        ).setup()
     }
 
     override fun onResume() {
@@ -40,29 +43,5 @@ class MainActivity : FragmentActivity() {
     override fun onStop() {
         super.onStop()
         playerServiceBinder.unbindServiceFrom(this)
-    }
-
-    private fun setupPlayerView() {
-        BottomPlayerViewListener(
-            view = binding.playerView,
-            viewModel = viewModel,
-            lifecycleOwner = this
-        ).apply {
-            listenToPlayerStateChange()
-            listenToCurrentTrackStateChange()
-        }
-
-        PlayerButtons(
-            playerBinder = playerServiceBinder,
-            btnPlay = binding.playerView.btnPlay,
-            btnNext = binding.playerView.btnNext,
-            btnPrevious = binding.playerView.btnPrev
-        ).build()
-
-        binding.playerView.btnQueue.setOnClickListener {
-            if (playerServiceBinder.isBound && viewModel.localAudioList.value != null) {
-                playerServiceBinder.service.audioPlayer.addLocalTracks(viewModel.localAudioList.value!!)
-            }
-        }
     }
 }
