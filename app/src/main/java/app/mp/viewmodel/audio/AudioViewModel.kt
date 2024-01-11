@@ -33,7 +33,7 @@ class AudioViewModel @Inject constructor(
     val playerState = audioPlayerState.playerState.asLiveData()
     val currentTrackState = audioPlayerState.currentTrackState.asLiveData()
 
-    fun getSimilarAudio(id: Int = 680316) {
+    fun getSimilarAudio(id: Int) {
         viewModelScope.launch {
             audioRepository.getSimilarAudios(id).collect {
                 when (it) {

@@ -42,7 +42,7 @@ class AudioSearchScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getSimilarAudio()
+        viewModel.getSimilarAudio(80408)
         viewModel.audioList.observe(viewLifecycleOwner) {
             if (playerServiceBinder.isBound && it.isNotEmpty()) {
                 playerServiceBinder.service.audioPlayer.addAudios(it)
