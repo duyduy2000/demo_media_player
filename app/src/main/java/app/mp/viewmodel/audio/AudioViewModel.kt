@@ -1,4 +1,4 @@
-package app.mp.viewmodel.home
+package app.mp.viewmodel.audio
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class AudioViewModel @Inject constructor(
     private val audioRepository: AudioRepository,
     audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
@@ -33,9 +33,9 @@ class HomeViewModel @Inject constructor(
     val playerState = audioPlayerState.playerState.asLiveData()
     val currentTrackState = audioPlayerState.currentTrackState.asLiveData()
 
-    fun getSimilarTrack(trackId: Int = 680316) {
+    fun getSimilarAudio(id: Int = 680316) {
         viewModelScope.launch {
-            audioRepository.getSimilarAudios(trackId).collect {
+            audioRepository.getSimilarAudios(id).collect {
                 when (it) {
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
@@ -49,7 +49,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getAllLocalTracks(context: Context) {
+    fun getAllLocalAudios(context: Context) {
         viewModelScope.launch {
             LocalAudioStorage(context).getAllLocalAudios().collect {
                 _localAudioList.value = _localAudioList.value?.plus(it)

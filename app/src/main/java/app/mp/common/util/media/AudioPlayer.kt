@@ -60,7 +60,7 @@ class AudioPlayer(context: Context) {
         prepare()
     }
 
-    fun addLocalTracks(audioList: List<LocalAudio>) = mediaSession?.player?.apply {
+    fun addLocalAudios(audioList: List<LocalAudio>) = mediaSession?.player?.apply {
         for (audio in audioList) {
             addMediaItem(
                 MediaItem.Builder()
@@ -76,6 +76,11 @@ class AudioPlayer(context: Context) {
             )
         }
         prepare()
+    }
+
+    fun playAudioByIndex(index: Int) = mediaSession?.player?.apply {
+        seekToDefaultPosition(index)
+        if (!playWhenReady) play()
     }
 
     companion object {

@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import app.mp.R
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.ViewPlayerBottomBinding
-import app.mp.viewmodel.home.HomeViewModel
+import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -12,7 +12,7 @@ import dagger.hilt.components.SingletonComponent
 
 class BottomPlayerView(
     private val view: ViewPlayerBottomBinding,
-    private val viewModel: HomeViewModel,
+    private val viewModel: AudioViewModel,
     private val activity: FragmentActivity,
 ) {
     private val serviceBinder = EntryPointAccessors.fromApplication(
@@ -33,7 +33,7 @@ class BottomPlayerView(
 
         view.btnQueue.setOnClickListener {
             if (serviceBinder.isBound && viewModel.localAudioList.value != null) {
-                serviceBinder.service.audioPlayer.addLocalTracks(viewModel.localAudioList.value!!)
+                serviceBinder.service.audioPlayer.addLocalAudios(viewModel.localAudioList.value!!)
             }
         }
     }

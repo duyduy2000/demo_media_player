@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import app.mp.R
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.FragmentAudioSearchScreenBinding
-import app.mp.viewmodel.home.HomeViewModel
+import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,8 +22,8 @@ class AudioSearchScreenFragment : Fragment() {
     private var _binding: FragmentAudioSearchScreenBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<HomeViewModel>()
-    private val trackListAdapter = TrackListAdapter()
+    private val viewModel by viewModels<AudioViewModel>()
+    private val audioListAdapter = AudioListAdapter()
 
     @Inject
     lateinit var playerServiceBinder: PlayerServiceBinder
@@ -34,7 +34,7 @@ class AudioSearchScreenFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAudioSearchScreenBinding.inflate(inflater, container, false)
-        binding.rvNoteList.adapter = trackListAdapter
+        binding.rvNoteList.adapter = audioListAdapter
         addDividerToTrackListView()
         return binding.root
     }
@@ -42,11 +42,17 @@ class AudioSearchScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getSimilarTrack()
+        viewModel.getSimilarAudio()
         viewModel.audioList.observe(viewLifecycleOwner) {
             if (playerServiceBinder.isBound && it.isNotEmpty()) {
                 playerServiceBinder.service.audioPlayer.addAudios(it)
-                trackListAdapter.submitList(it)
+                audioListAdapter.submitList(it)
+            }
+        }
+
+        audioListAdapter.onItemClick = { _, index ->
+            if (playerServiceBinder.isBound) {
+                playerServiceBinder.service.audioPlayer.playAudioByIndex(index)
             }
         }
     }

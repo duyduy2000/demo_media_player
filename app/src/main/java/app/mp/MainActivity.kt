@@ -7,7 +7,7 @@ import app.mp.common.util.PermissionHandler
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.ActivityMainBinding
 import app.mp.view.widget.player.BottomPlayerView
-import app.mp.viewmodel.home.HomeViewModel
+import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class MainActivity : FragmentActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel by viewModels<AudioViewModel>()
 
     @Inject
     lateinit var playerServiceBinder: PlayerServiceBinder
@@ -27,7 +27,7 @@ class MainActivity : FragmentActivity() {
         PermissionHandler.askPermissionsWhenAppStarted(this)
         playerServiceBinder.bindServiceTo(this)
 
-        viewModel.getAllLocalTracks(this)
+        viewModel.getAllLocalAudios(this)
         BottomPlayerView(
             view = binding.playerView,
             viewModel = viewModel,

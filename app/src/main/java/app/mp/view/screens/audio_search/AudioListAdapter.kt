@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import app.mp.databinding.ItemViewAudioBinding
 import app.mp.model.model.Audio
 
-class TrackListAdapter :
-    ListAdapter<Audio, TrackListAdapter.ViewHolder>(TrackComparator()) {
+class AudioListAdapter :
+    ListAdapter<Audio, AudioListAdapter.ViewHolder>(AudioComparator()) {
+
+    var onItemClick: (item: Audio, index: Int) -> Unit = { _, _ -> }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -20,6 +22,7 @@ class TrackListAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(audio = getItem(position))
+        holder.itemView.setOnClickListener{ onItemClick(getItem(position), position) }
     }
 
     class ViewHolder(binding: ItemViewAudioBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -37,7 +40,7 @@ class TrackListAdapter :
         }
     }
 
-    class TrackComparator : DiffUtil.ItemCallback<Audio>() {
+    class AudioComparator : DiffUtil.ItemCallback<Audio>() {
         override fun areItemsTheSame(oldItem: Audio, newItem: Audio) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Audio, newItem: Audio) =
