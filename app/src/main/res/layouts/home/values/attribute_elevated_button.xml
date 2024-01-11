@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyElevatedButton">
+        <attr name="borderColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+        <attr name="backgroundColor" format="color" />
+        <attr name="icon" format="reference" />
+        <attr name="title" format="string" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
+</resources>

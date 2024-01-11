@@ -4,55 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".view.screens.home.HomeScreenFragment">
 
-    <com.google.android.material.card.MaterialCardView
+    <app.mp.view.widget.button.MyElevatedButton
         android:id="@+id/btn_online_search"
-        app:strokeWidth="2dp"
-        app:strokeColor="@color/blue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/blue_50"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:contentPadding="8dp"
+        app:borderColor="@color/blue"
+        app:borderWidth="2dp"
+        app:cardElevation="0dp"
+        app:icon="@drawable/round_search_36"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/search_icon"
-                android:src="@drawable/round_search_36"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/emptyDescription"
-                app:tint="@color/blue" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/online_search"
-                android:textColor="@color/blue"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/search_icon"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UseCompatTextViewDrawableXml" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintTop_toTopOf="parent"
+        app:textColor="@color/blue"
+        app:title="@string/online_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
