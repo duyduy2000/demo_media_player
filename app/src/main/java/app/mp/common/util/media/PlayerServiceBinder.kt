@@ -7,8 +7,7 @@ import android.os.IBinder
 import app.mp.model.service.AudioPlayerService
 
 class PlayerServiceBinder : ServiceConnection {
-    var isBound = false
-        private set
+    private var isBound = false
     lateinit var service: AudioPlayerService
         private set
 
@@ -41,6 +40,10 @@ class PlayerServiceBinder : ServiceConnection {
             unbindService(this@PlayerServiceBinder)
             isBound = false
         }
+    }
+
+    fun usePlayer(action: AudioPlayer.() -> Unit) {
+        if (isBound) service.audioPlayer.action()
     }
 
 }

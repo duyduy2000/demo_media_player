@@ -22,8 +22,8 @@ class AudioViewModel @Inject constructor(
     audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
 
-    private val _AudioList = MutableLiveData<List<Audio>>(emptyList())
-    val audioList: LiveData<List<Audio>> get() = _AudioList
+    private val _audioList = MutableLiveData<List<Audio>>(emptyList())
+    val audioList: LiveData<List<Audio>> get() = _audioList
 
 
     val playerState = audioPlayerState.playerState.asLiveData()
@@ -36,7 +36,7 @@ class AudioViewModel @Inject constructor(
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
                         val trackList = it.data!!.toModel()
-                        _AudioList.value = _AudioList.value!!.plus(trackList)
+                        _audioList.value = _audioList.value!!.plus(trackList)
                     }
 
                     is ResponseResult.Unknown -> Unit
@@ -48,7 +48,7 @@ class AudioViewModel @Inject constructor(
     fun getAllLocalAudios(context: Context) {
         viewModelScope.launch {
             LocalAudioStorage(context).getAllLocalAudios().collect {
-                _AudioList.value = _AudioList.value?.plus(it)
+                _audioList.value = _audioList.value?.plus(it)
             }
         }
     }

@@ -25,7 +25,7 @@ class AudioPlayerService : MediaSessionService() {
     lateinit var audioPlayer: AudioPlayer
     private lateinit var notification: AudioPlayerNotification
     private val binder = LocalBinder()
-    val player
+    private val player
         get() = audioPlayer.mediaSession?.player!!
 
     @Inject

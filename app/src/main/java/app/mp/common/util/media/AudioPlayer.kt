@@ -55,6 +55,11 @@ class AudioPlayer(context: Context) {
         prepare()
     }
 
+    fun replaceAllWithNewAudios(audioList: List<Audio>) = mediaSession?.player?.apply {
+        clearMediaItems()
+        addAudios(audioList)
+    }
+
     fun playAudioByIndex(index: Int) = mediaSession?.player?.apply {
         seekToDefaultPosition(index)
         if (!playWhenReady) play()

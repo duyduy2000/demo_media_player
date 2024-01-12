@@ -32,8 +32,10 @@ class BottomPlayerView(
         ).build()
 
         view.btnQueue.setOnClickListener {
-            if (serviceBinder.isBound && viewModel.audioList.value != null) {
-                serviceBinder.service.audioPlayer.addAudios(viewModel.audioList.value!!)
+            serviceBinder.usePlayer {
+                if (viewModel.audioList.value != null) {
+                    addAudios(viewModel.audioList.value!!)
+                }
             }
         }
     }

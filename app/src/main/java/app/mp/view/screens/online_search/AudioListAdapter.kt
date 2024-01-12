@@ -12,7 +12,7 @@ import app.mp.model.model.Audio
 class AudioListAdapter :
     ListAdapter<Audio, AudioListAdapter.ViewHolder>(AudioComparator()) {
 
-    var onItemClick: (item: Audio, index: Int) -> Unit = { _, _ -> }
+    private var onClick: (Audio, Int) -> Unit = { _, _ -> }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -22,7 +22,11 @@ class AudioListAdapter :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(audio = getItem(position))
-        holder.itemView.setOnClickListener{ onItemClick(getItem(position), position) }
+        holder.itemView.setOnClickListener{ onClick(getItem(position), position) }
+    }
+
+    fun onItemClick(listener: (Audio, Int) -> Unit) {
+        onClick = listener
     }
 
     class ViewHolder(binding: ItemViewAudioBinding) : RecyclerView.ViewHolder(binding.root) {

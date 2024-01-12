@@ -32,7 +32,7 @@ data class PlayerButtons(
 
     private fun ImageView.setOnPressListener(listener: (player: Player) -> Unit) {
         setOnClickListener {
-            if (playerBinder.isBound) listener(playerBinder.service.player)
+            playerBinder.usePlayer { listener(mediaSession!!.player) }
         }
     }
 

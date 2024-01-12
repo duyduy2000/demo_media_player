@@ -13,7 +13,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
-
     private lateinit var binding: ActivityMainBinding
     private val viewModel by viewModels<AudioViewModel>()
 
@@ -24,10 +23,10 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         PermissionHandler.askPermissionsWhenAppStarted(this)
         playerServiceBinder.bindServiceTo(this)
 
-        viewModel.getAllLocalAudios(this)
         BottomPlayerView(
             view = binding.playerView,
             viewModel = viewModel,
