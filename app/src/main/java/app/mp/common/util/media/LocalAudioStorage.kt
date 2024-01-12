@@ -38,18 +38,18 @@ class LocalAudioStorage(private val context: Context) {
     }
 
     private fun Cursor.getAudio(): Audio {
-        val id = this.getLong(this.getColumnIndexOrThrow(AudioStore._ID))
+        val id = getLong(this.getColumnIndexOrThrow(AudioStore._ID))
         val author =
-            if (this.getString(this.getColumnIndexOrThrow(AudioStore.ARTIST)) == "<unknow>")
+            if (getString(this.getColumnIndexOrThrow(AudioStore.ARTIST)) == "<unknow>")
                 "Unknow Author"
             else
-                this.getString(this.getColumnIndexOrThrow(AudioStore.ARTIST))
+                getString(this.getColumnIndexOrThrow(AudioStore.ARTIST))
 
         return Audio(
             id = id,
             name = getString(getColumnIndexOrThrow(AudioStore.DISPLAY_NAME)),
             author = author,
-            duration = getInt(getColumnIndexOrThrow(AudioStore.DURATION)).toDouble(),
+            duration = getInt(getColumnIndexOrThrow(AudioStore.DURATION)).toDouble() / 1000,
             fileSize = getInt(getColumnIndexOrThrow(AudioStore.SIZE)),
             uri = ContentUris.withAppendedId(
                 /* contentUri = */ AudioStore.EXTERNAL_CONTENT_URI,
