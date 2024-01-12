@@ -4,21 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.screens.home.HomeScreenFragment">
+    tools:context=".view.screens.home.HomeScreen">
 
     <app.mp.view.widget.button.MyElevatedButton
         android:id="@+id/btn_online_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:backgroundColor="@color/blue_50"
         app:borderColor="@color/blue"
         app:borderWidth="2dp"
         app:cardElevation="0dp"
         app:icon="@drawable/round_search_36"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_local_audio"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:textColor="@color/blue"
         app:title="@string/online_search" />
+
+    <app.mp.view.widget.button.MyElevatedButton
+        android:id="@+id/btn_local_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundColor="@color/green_50"
+        app:borderColor="@color/dark_green"
+        app:borderWidth="2dp"
+        app:cardElevation="0dp"
+        app:icon="@drawable/round_music_note_36"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_online_search"
+        app:textColor="@color/dark_green"
+        app:title="@string/local_audio" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

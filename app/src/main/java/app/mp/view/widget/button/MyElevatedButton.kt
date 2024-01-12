@@ -46,6 +46,7 @@ class MyElevatedButton @JvmOverloads constructor(
                     strokeWidth = borderWidth.toInt()
                 }
                 icon.setImageResource(iconSrc)
+                icon.setColorFilter(textColor)
                 this.title.text = title
                 this.title.setTextColor(textColor)
             }

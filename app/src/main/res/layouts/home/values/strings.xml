@@ -5,4 +5,5 @@
     <string name="unknown_track">Unknown Track Unknown Track Unknown Track</string>
     <string name="unknown_author">Unknown Author Unknown Author Unknown Author</string>
     <string name="online_search">Online Search</string>
+    <string name="local_audio">Local Audio</string>
 </resources>

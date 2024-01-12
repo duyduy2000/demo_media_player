@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AudioSearchScreenFragment : Fragment() {
+class AudioSearchScreen : Fragment() {
 
     private var _binding: FragmentAudioSearchScreenBinding? = null
     private val binding get() = _binding!!
@@ -34,7 +34,7 @@ class AudioSearchScreenFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAudioSearchScreenBinding.inflate(inflater, container, false)
-        binding.rvNoteList.adapter = audioListAdapter
+        binding.rvAudioList.adapter = audioListAdapter
         addDividerToTrackListView()
         return binding.root
     }
@@ -67,7 +67,7 @@ class AudioSearchScreenFragment : Fragment() {
         val dividerView =
             ContextCompat.getDrawable(requireContext(), R.drawable.divider_audio_list)!!
         divider.setDrawable(dividerView)
-        binding.rvNoteList.addItemDecoration(divider)
+        binding.rvAudioList.addItemDecoration(divider)
     }
 
 }
