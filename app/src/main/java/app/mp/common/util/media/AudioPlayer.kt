@@ -6,12 +6,10 @@ import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC
 import androidx.media3.common.C.USAGE_MEDIA
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.PercentageRating
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.session.MediaSession
 import app.mp.model.model.Audio
-import app.mp.model.model.LocalAudio
 
 class AudioPlayer(context: Context) {
     var mediaSession: MediaSession?
@@ -40,27 +38,6 @@ class AudioPlayer(context: Context) {
     }
 
     fun addAudios(audioList: List<Audio>) = mediaSession?.player?.apply {
-        for (audio in audioList) {
-            addMediaItem(
-                MediaItem.Builder()
-                    .setMediaId(audio.id.toString())
-                    .setTag(audio.tags)
-                    .setUri(audio.previewHqMp3)
-                    .setMediaMetadata(
-                        MediaMetadata.Builder()
-                            .setTitle(audio.name)
-                            .setArtist(audio.username)
-                            .setDescription(audio.description)
-                            .setUserRating(PercentageRating(audio.averageRating.toFloat()))
-                            .build()
-                    )
-                    .build()
-            )
-        }
-        prepare()
-    }
-
-    fun addLocalAudios(audioList: List<LocalAudio>) = mediaSession?.player?.apply {
         for (audio in audioList) {
             addMediaItem(
                 MediaItem.Builder()

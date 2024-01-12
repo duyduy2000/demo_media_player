@@ -36,7 +36,7 @@ class AudioListAdapter :
 
         fun bind(audio: Audio) {
             audioTitle.text = audio.name
-            authorTitle.text = audio.username
+            authorTitle.text = audio.author
         }
     }
 
@@ -44,7 +44,7 @@ class AudioListAdapter :
         override fun areItemsTheSame(oldItem: Audio, newItem: Audio) = oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Audio, newItem: Audio) =
-            oldItem.name == newItem.name && oldItem.username == newItem.username
+            oldItem.name == newItem.name && oldItem.author == newItem.author
 
     }
 }

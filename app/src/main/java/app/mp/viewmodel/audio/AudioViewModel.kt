@@ -11,7 +11,6 @@ import app.mp.common.util.media.LocalAudioStorage
 import app.mp.common.util.network.ResponseResult
 import app.mp.model.mapper.toModel
 import app.mp.model.model.Audio
-import app.mp.model.model.LocalAudio
 import app.mp.model.repo.def.AudioRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,11 +22,8 @@ class AudioViewModel @Inject constructor(
     audioPlayerState: AudioPlayerState,
 ) : ViewModel() {
 
-    private val _audioList = MutableLiveData<List<Audio>>(emptyList())
-    val audioList: LiveData<List<Audio>> get() = _audioList
-
-    private val _localAudioList = MutableLiveData<List<LocalAudio>>(emptyList())
-    val localAudioList: LiveData<List<LocalAudio>> get() = _localAudioList
+    private val _AudioList = MutableLiveData<List<Audio>>(emptyList())
+    val audioList: LiveData<List<Audio>> get() = _AudioList
 
 
     val playerState = audioPlayerState.playerState.asLiveData()
@@ -40,7 +36,7 @@ class AudioViewModel @Inject constructor(
                     is ResponseResult.Failed -> Unit
                     is ResponseResult.Success -> {
                         val trackList = it.data!!.toModel()
-                        _audioList.value = _audioList.value!!.plus(trackList)
+                        _AudioList.value = _AudioList.value!!.plus(trackList)
                     }
 
                     is ResponseResult.Unknown -> Unit
@@ -52,7 +48,7 @@ class AudioViewModel @Inject constructor(
     fun getAllLocalAudios(context: Context) {
         viewModelScope.launch {
             LocalAudioStorage(context).getAllLocalAudios().collect {
-                _localAudioList.value = _localAudioList.value?.plus(it)
+                _AudioList.value = _AudioList.value?.plus(it)
             }
         }
     }
