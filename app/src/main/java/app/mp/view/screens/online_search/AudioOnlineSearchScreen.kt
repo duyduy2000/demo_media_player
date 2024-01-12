@@ -1,4 +1,4 @@
-package app.mp.view.screens.audio_search
+package app.mp.view.screens.online_search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.mp.R
 import app.mp.common.util.media.PlayerServiceBinder
-import app.mp.databinding.FragmentAudioSearchScreenBinding
+import app.mp.databinding.FragmentAudioOnlineSearchScreenBinding
 import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AudioSearchScreen : Fragment() {
+class AudioOnlineSearchScreen : Fragment() {
 
-    private var _binding: FragmentAudioSearchScreenBinding? = null
+    private var _binding: FragmentAudioOnlineSearchScreenBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<AudioViewModel>()
@@ -33,7 +33,7 @@ class AudioSearchScreen : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentAudioSearchScreenBinding.inflate(inflater, container, false)
+        _binding = FragmentAudioOnlineSearchScreenBinding.inflate(inflater, container, false)
         binding.rvAudioList.adapter = audioListAdapter
         addDividerToTrackListView()
         return binding.root

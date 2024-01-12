@@ -1,4 +1,4 @@
-package app.mp.view.screens.audio_search
+package app.mp.view.screens.online_search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

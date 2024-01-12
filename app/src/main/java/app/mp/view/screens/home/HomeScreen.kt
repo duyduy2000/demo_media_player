@@ -25,7 +25,7 @@ class HomeScreen : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnOnlineSearch.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeScreen_to_audioSearchScreen)
+            it.findNavController().navigate(R.id.action_homeScreen_to_audioOnlineSearchScreen)
         }
 
         binding.btnLocalAudio.setOnClickListener{

@@ -11,8 +11,8 @@
         android:label="HomeScreen"
         tools:layout="@layout/fragment_home_screen" >
         <action
-            android:id="@+id/action_homeScreen_to_audioSearchScreen"
-            app:destination="@id/audioSearchScreen"
+            android:id="@+id/action_homeScreen_to_audioOnlineSearchScreen"
+            app:destination="@id/audioOnlineSearchScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -26,10 +26,10 @@
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
-        android:id="@+id/audioSearchScreen"
-        android:name="app.mp.view.screens.audio_search.AudioSearchScreen"
-        android:label="AudioSearchScreen"
-        tools:layout="@layout/fragment_audio_search_screen" />
+        android:id="@+id/audioOnlineSearchScreen"
+        android:name="app.mp.view.screens.online_search.AudioOnlineSearchScreen"
+        android:label="AudioOnlineSearchScreen"
+        tools:layout="@layout/fragment_audio_online_search_screen" />
     <fragment
         android:id="@+id/localAudioScreen"
         android:name="app.mp.view.screens.local_audio.LocalAudioScreen"
