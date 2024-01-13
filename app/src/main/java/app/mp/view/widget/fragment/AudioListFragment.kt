@@ -27,7 +27,7 @@ open class AudioListFragment : Fragment() {
         viewModel.audioList.observe(viewLifecycleOwner) {
             playerServiceBinder.usePlayer {
                 if (it.isNotEmpty()) {
-                    replaceAllWithNewAudios(it)
+                    addAudios(it)
                     audioListView.adapter.submitList(it)
                 }
             }

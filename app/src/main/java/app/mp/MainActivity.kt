@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import app.mp.common.util.PermissionHandler
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.databinding.ActivityMainBinding
+import app.mp.model.service.AudioPlayerService
 import app.mp.view.widget.player.BottomPlayerView
 import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class MainActivity : FragmentActivity() {
         setContentView(binding.root)
 
         PermissionHandler.askPermissionsWhenAppStarted(this)
+        startService(AudioPlayerService.getActionIntent(this, AudioPlayerService.Action.START))
         playerServiceBinder.bindServiceTo(this)
 
         BottomPlayerView(
