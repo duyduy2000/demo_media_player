@@ -1,7 +1,9 @@
 package app.mp.view.widget.fragment
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import app.mp.common.util.media.PlayerServiceBinder
 import app.mp.view.widget.list.AudioListView
 import app.mp.viewmodel.audio.AudioViewModel
@@ -16,8 +18,8 @@ open class AudioListFragment : Fragment() {
     @Inject
     lateinit var playerServiceBinder: PlayerServiceBinder
 
-    fun initView(listView: AudioListView) {
-        audioListView = listView
+    fun initView(context: Context, recyclerView: RecyclerView) {
+        audioListView = AudioListView(context, view = recyclerView)
         audioListView.init()
     }
 
