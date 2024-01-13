@@ -27,7 +27,6 @@ open class AudioListFragment : Fragment() {
         viewModel.audioList.observe(viewLifecycleOwner) {
             playerServiceBinder.usePlayer {
                 if (it.isNotEmpty()) {
-                    addAudios(it)
                     audioListView.adapter.submitList(it)
                 }
             }
@@ -36,7 +35,10 @@ open class AudioListFragment : Fragment() {
 
     fun setChangeAudioOnItemClick() {
         audioListView.adapter.onItemClick { _, index ->
-            playerServiceBinder.usePlayer { playAudioByIndex(index) }
+            playerServiceBinder.usePlayer {
+                viewModel.audioList.value?.let { addAudios(it) }
+                playAudioByIndex(index)
+            }
         }
     }
 }
