@@ -39,13 +39,17 @@ class PlayerListener(
         super.onMediaItemTransition(mediaItem, reason)
         notification.updateOnPlayerStateChange()
         mediaItem?.let { item ->
-            state.currentTrackState.update { state.currentTrackState.value.copy(name = item.mediaMetadata.title.toString()) }
+            state.currentTrackState.update {
+                state.currentTrackState.value.copy(
+                    id = item.mediaId,
+                    name = item.mediaMetadata.title.toString(),
+                    index = player.currentMediaItemIndex,
+                )
+            }
         }
     }
 
     private fun stopPlayerWhenListEmpty() {
-        if (player.mediaItemCount == 0) {
-            player.pause()
-        }
+        if (player.mediaItemCount == 0) player.pause()
     }
 }

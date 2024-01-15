@@ -11,6 +11,7 @@
     <color name="gray">#505050</color>
     <color name="dark_gray">#323232</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="alpha_10">#1AFFFFFF</color>
     <color name="blue">#00A6FF</color>
     <color name="blue_50">#ECFAFF</color>
     <color name="dark_green">#059B00</color>

@@ -19,7 +19,7 @@ class LocalAudioScreen : AudioListFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentLocalAudioScreenBinding.inflate(inflater, container, false)
-        initView(context = requireContext(), recyclerView = binding.rvAudioList)
+        initView(recyclerView = binding.rvAudioList)
         return binding.root
     }
 
@@ -27,8 +27,6 @@ class LocalAudioScreen : AudioListFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getAllLocalAudios(context = requireContext())
-        setUpdateListOnDataChange()
-        setChangeAudioOnItemClick()
     }
 
     override fun onDestroyView() {

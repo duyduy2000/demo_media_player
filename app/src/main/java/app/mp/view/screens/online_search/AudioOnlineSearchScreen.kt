@@ -19,7 +19,7 @@ class AudioOnlineSearchScreen : AudioListFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAudioOnlineSearchScreenBinding.inflate(inflater, container, false)
-        initView(context = requireContext(), recyclerView = binding.rvAudioList)
+        initView(recyclerView = binding.rvAudioList)
         return binding.root
     }
 
@@ -27,8 +27,6 @@ class AudioOnlineSearchScreen : AudioListFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getSimilarAudio(80408)
-        setUpdateListOnDataChange()
-        setChangeAudioOnItemClick()
     }
 
     override fun onDestroyView() {

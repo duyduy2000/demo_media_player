@@ -2,13 +2,10 @@ package app.mp.view.widget.player
 
 import androidx.fragment.app.FragmentActivity
 import app.mp.R
-import app.mp.common.util.media.PlayerServiceBinder
+import app.mp.common.di.AppDependencies
 import app.mp.databinding.ViewPlayerBottomBinding
 import app.mp.viewmodel.audio.AudioViewModel
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 
 class BottomPlayerView(
     private val view: ViewPlayerBottomBinding,
@@ -16,9 +13,9 @@ class BottomPlayerView(
     private val activity: FragmentActivity,
 ) {
     private val serviceBinder = EntryPointAccessors.fromApplication(
-            activity,
-            InjectEntryPoint::class.java,
-        ).serviceBinder()
+        activity,
+        AppDependencies::class.java,
+    ).serviceBinder()
 
     fun setup() {
         listenToPlayerStateChange()
@@ -46,11 +43,5 @@ class BottomPlayerView(
             // Audio's name will be blank if there is no audio in playlist
             view.txtName.text = if (it.name != "") it.name else "No audio"
         }
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface InjectEntryPoint {
-        fun serviceBinder(): PlayerServiceBinder
     }
 }
