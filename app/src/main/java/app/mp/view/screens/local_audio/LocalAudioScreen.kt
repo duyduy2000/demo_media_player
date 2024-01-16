@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import app.mp.databinding.FragmentLocalAudioScreenBinding
 import app.mp.view.widget.fragment.AudioListFragment
+import app.mp.view.widget.list.NewAudioListView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,7 +20,8 @@ class LocalAudioScreen : AudioListFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentLocalAudioScreenBinding.inflate(inflater, container, false)
-        initView(recyclerView = binding.rvAudioList)
+//        initView(recyclerView = binding.rvAudioList)
+        binding.audioList.setContent { NewAudioListView(viewModel).Build() }
         return binding.root
     }
 
