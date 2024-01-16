@@ -43,7 +43,6 @@ class PlayerListener(
                 state.currentTrackState.value.copy(
                     id = item.mediaId,
                     name = item.mediaMetadata.title.toString(),
-                    index = player.currentMediaItemIndex,
                 )
             }
         }
