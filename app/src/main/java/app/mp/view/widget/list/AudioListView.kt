@@ -31,7 +31,7 @@ class AudioListView(private val viewModel: AudioViewModel, context: Context) {
                 this.itemsIndexed(items = list) { index, audio ->
                     AudioListItemView(
                         item = audio,
-                        isPlaying = audio.id.toString() == playingAudio?.id && audio.name == playingAudio?.name,
+                        isPlaying = audio.id.toString() == playingAudio?.id && audio.name == playingAudio?.name && audio.author == playingAudio?.author,
                         modifier = Modifier.clickable { changeAudio(index) }
                     )
 

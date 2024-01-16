@@ -43,6 +43,7 @@ class PlayerListener(
                 state.currentTrackState.value.copy(
                     id = item.mediaId,
                     name = item.mediaMetadata.title.toString(),
+                    author = item.mediaMetadata.artist.toString(),
                 )
             }
         }

@@ -16,6 +16,7 @@ class AudioPlayerState(
     data class CurrentTrackState(
         val id: String = "",
         val name: String = "",
+        val author: String = "",
     )
 }
 
