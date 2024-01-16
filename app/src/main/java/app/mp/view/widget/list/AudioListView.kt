@@ -1,65 +1,51 @@
 package app.mp.view.widget.list
 
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import app.mp.R
+import android.content.Context
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Divider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.unit.dp
 import app.mp.common.di.AppDependencies
 import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.EntryPointAccessors
 
-class AudioListView(
-    private val fragment: Fragment,
-    private val view: RecyclerView,
-    private val viewModel: AudioViewModel,
-) {
-    private val adapter = AudioListAdapter(context)
-    private val context get() = fragment.requireContext()
+class AudioListView(private val viewModel: AudioViewModel, context: Context) {
+
     private val serviceBinder =
         EntryPointAccessors.fromApplication(context, AppDependencies::class.java).serviceBinder()
 
-    init {
-        view.adapter = adapter
-        addDividerToTrackListView()
-        setUpdateListOnDataChange()
-        setChangeAudioOnItemClick()
-        setChangeItemLayoutOnAudioChange()
-    }
+    @Composable
+    fun Build() {
+        val audioList by viewModel.audioList.observeAsState()
+        val playingAudio by viewModel.currentTrackState.observeAsState()
 
-    private fun addDividerToTrackListView() {
-        val divider = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        val dividerView = ContextCompat.getDrawable(context, R.drawable.divider_audio_list)!!
-        divider.setDrawable(dividerView)
-        view.addItemDecoration(divider)
-    }
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            audioList?.let { list ->
+                this.itemsIndexed(items = list) { index, audio ->
+                    AudioListItemView(
+                        item = audio,
+                        isPlaying = index == playingAudio!!.index,
+                        modifier = Modifier.clickable { changeAudio(index) }
+                    )
 
-    private fun setUpdateListOnDataChange() {
-        viewModel.audioList.observe(fragment.viewLifecycleOwner) {
-            serviceBinder.usePlayer { if (it.isNotEmpty()) adapter.submitList(it) }
-        }
-    }
-
-    private fun setChangeAudioOnItemClick() {
-        adapter.onItemClick { _, index ->
-            serviceBinder.usePlayer {
-                viewModel.audioList.value?.let { addAudios(it) }
-                playAudioByIndex(index)
+                    if (index != list.size - 1) Divider(
+                        modifier = Modifier.alpha(0.2f),
+                        thickness = 2.dp
+                    )
+                }
             }
         }
     }
 
-    private fun setChangeItemLayoutOnAudioChange() {
-        viewModel.currentTrackState.observe(fragment.viewLifecycleOwner) {
-            val currentIndex = it.index
-            val prevIndex = adapter.selectedItemIndex
-            adapter.apply {
-                prevIndex?.let { index -> notifyItemChanged(index) }
-                adapter.selectedItemIndex = currentIndex
-                currentIndex?.let { index -> notifyItemChanged(index) }
-            }
-        }
+    private fun changeAudio(index: Int) = serviceBinder.usePlayer {
+        viewModel.audioList.value?.let { addAudios(it) }
+        playAudioByIndex(index)
     }
-
 }

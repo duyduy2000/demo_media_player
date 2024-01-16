@@ -1,7 +1,11 @@
 package app.mp.view.widget.list
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +17,10 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -31,11 +37,17 @@ import app.mp.model.model.Audio
 
 @Composable
 fun AudioListItemView(item: Audio, isPlaying: Boolean, modifier: Modifier = Modifier) {
+    val backgroundColor by animateColorAsState(
+        if (isPlaying) Color.White.copy(alpha = 0.1f) else Color.Transparent,
+        label = "background",
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Row(
         modifier = modifier.fillMaxWidth()
             .wrapContentHeight()
-            .padding(all = 16.dp)
-            .background(color = Color.Transparent),
+            .drawBehind { drawRect(color = backgroundColor) }
+            .padding(all = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -74,11 +86,16 @@ private fun Content(audio: Audio) {
 @Composable
 fun PlayingIcon(visible: Boolean) {
     Box(modifier = Modifier.wrapContentSize().padding(end = 8.dp)) {
-        if (visible)
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn(animationSpec = tween(durationMillis = 300)),
+            exit = fadeOut(animationSpec = tween(durationMillis = 300)),
+        ) {
             Image(
                 painter = painterResource(R.drawable.round_star_36),
                 contentDescription = "playing",
             )
+        }
     }
 }
 

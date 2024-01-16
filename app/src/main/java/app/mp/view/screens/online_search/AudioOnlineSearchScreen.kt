@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import app.mp.databinding.FragmentAudioOnlineSearchScreenBinding
-import app.mp.view.widget.fragment.AudioListFragment
+import app.mp.view.widget.list.AudioListView
+import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AudioOnlineSearchScreen : AudioListFragment() {
+class AudioOnlineSearchScreen : Fragment() {
     private var _binding: FragmentAudioOnlineSearchScreenBinding? = null
     private val binding get() = _binding!!
+    private val viewModel by viewModels<AudioViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,7 +23,9 @@ class AudioOnlineSearchScreen : AudioListFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAudioOnlineSearchScreenBinding.inflate(inflater, container, false)
-        initView(recyclerView = binding.rvAudioList)
+        binding.onlineAudioList.setContent {
+            AudioListView(viewModel = viewModel, context = requireContext()).Build()
+        }
         return binding.root
     }
 

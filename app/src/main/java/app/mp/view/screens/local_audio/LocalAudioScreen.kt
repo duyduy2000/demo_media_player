@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import app.mp.databinding.FragmentLocalAudioScreenBinding
-import app.mp.view.widget.fragment.AudioListFragment
-import app.mp.view.widget.list.NewAudioListView
+import app.mp.view.widget.list.AudioListView
+import app.mp.viewmodel.audio.AudioViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LocalAudioScreen : AudioListFragment() {
+class LocalAudioScreen : Fragment() {
     private var _binding: FragmentLocalAudioScreenBinding? = null
     private val binding get() = _binding!!
+    private val viewModel by viewModels<AudioViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,12 +23,8 @@ class LocalAudioScreen : AudioListFragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentLocalAudioScreenBinding.inflate(inflater, container, false)
-//        initView(recyclerView = binding.rvAudioList)
-        binding.audioList.setContent {
-            NewAudioListView(
-                viewModel = viewModel,
-                context = requireContext()
-            ).Build()
+        binding.localAudioList.setContent {
+            AudioListView(viewModel = viewModel, context = requireContext()).Build()
         }
         return binding.root
     }

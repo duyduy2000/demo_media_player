@@ -14,8 +14,8 @@ import app.mp.R
 import app.mp.databinding.ItemViewAudioBinding
 import app.mp.model.model.Audio
 
-class AudioListAdapter(private val context: Context) :
-    ListAdapter<Audio, AudioListAdapter.ViewHolder>(AudioComparator()) {
+class OldAudioListAdapter(private val context: Context) :
+    ListAdapter<Audio, OldAudioListAdapter.ViewHolder>(AudioComparator()) {
 
     private var onClick: (Audio, Int) -> Unit = { _, _ -> }
     var selectedItemIndex: Int? = null
