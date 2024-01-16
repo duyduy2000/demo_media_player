@@ -21,7 +21,12 @@ class LocalAudioScreen : AudioListFragment() {
     ): View {
         _binding = FragmentLocalAudioScreenBinding.inflate(inflater, container, false)
 //        initView(recyclerView = binding.rvAudioList)
-        binding.audioList.setContent { NewAudioListView(viewModel).Build() }
+        binding.audioList.setContent {
+            NewAudioListView(
+                viewModel = viewModel,
+                context = requireContext()
+            ).Build()
+        }
         return binding.root
     }
 
